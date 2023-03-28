@@ -1,30 +1,46 @@
+import axios from 'axios';
 import { react, useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({setUser, user}) => {
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
 
+
+    const getUserID = async (username) => {
+        const userID = await axios.get("http://localhost:5000/user/" + username)
+        return userID
+    }
+
      const loginUser = async (e) => {
         e.preventDefault();
 
-        let body = new URLSearchParams();
-        body.append('username', username);
-        body.append('password', password);
+        const body = {
+            username: username,
+            password: password
+        }
     
-        const requestOptions = {
-           method: "POST",
-            headers: {"Accept": "application/x-www-form-urlencoded", "Content-Type": "application/x-www-form-urlencoded"},
-            body: body
-       };
-        const loggedIn = await fetch("http://localhost:5000/login", requestOptions)
-                                .then((response) => {return response.json()});
-        if (loggedIn === true) {
+        axios.defaults.baseURL = ''
+        axios.defaults.withCredentials = true
+        const loggedIn = await axios.post("http://localhost:5000/login", body, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then((response) => {return response.data})
+        .catch(err => {
+            throw (err)
+        });
+        console.log(loggedIn)
+        if (loggedIn.authorized === true) {
+            const userID = await getUserID(username)
+            localStorage.setItem("user", JSON.stringify(userID.data))
+            setUser(userID.data)
             return navigate("/home")
         } else {
-            console.log(loggedIn)
+            console.log('this isnt working')
         }
        
     } 

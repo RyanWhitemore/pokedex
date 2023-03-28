@@ -14,9 +14,6 @@ const con = mysql.createConnection({
 })
 
 const registerUser = async (req, res) => {
-    console.log(req.body)
-    req.body = JSON.parse(req.body)
-    console.log(req.body)
     const { username, password } = req.body
     con.query('SELECT username FROM users WHERE username = ?', [username], async (err, results) => {
         if (err) {
@@ -31,12 +28,21 @@ const registerUser = async (req, res) => {
                 if (err) {
                     throw err
                 }
+            con.query("SELECT user_id FROM users WHERE username = ?", [username], (err, results) => {
+                if (err) {
+                    throw(err)
+                } else {
+                    con.query("INSERT INTO pokemon_users (user_id, pokemon_id) SELECT ?, pokemon_id FROM pokemon", [parseInt(results[0].user_id)], (err, results) => {
+                        if (err) {
+                            throw (err)
+                        }
+                    })
+                }
+            })
             res.status(201).send(`user with username ${username} created`)
             })
         }
     })
-   
-
 }
 
 

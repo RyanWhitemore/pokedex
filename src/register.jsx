@@ -1,5 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -10,18 +11,22 @@ const Register = () => {
 
     let registerUser = async (e) => {
         e.preventDefault();
-        const requestOptions = {
-            method: "POST",
-            headers: {"Accept": "application/json", "Content-Type": "application/json"},
-            body: JSON.stringify({
-                username: username,
-                password: password
-            }),
-            mode: "no-cors"
-        };
-        await fetch('http://localhost:5000/register', requestOptions);
+
+        const body = {
+            username: username,
+            password: password
+        }
+
+        axios.defaults.baseURL = ''
+        await axios.post("http://localhost:5000/register", body, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then(() => {
+            navigate('/login')
+        })
         
-        navigate('/login')
     }
     
 
