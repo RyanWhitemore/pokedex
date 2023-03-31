@@ -1,0 +1,33 @@
+table {
+    width: 66%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid;
+}
+
+#logout {
+   float: right;
+}
+
+#header {
+    display: block;
+    border-bottom: 2px solid red;
+    font-size: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#search-image {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 6px;
+    right: 20px;
+}
