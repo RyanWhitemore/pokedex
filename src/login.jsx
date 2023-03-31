@@ -1,19 +1,21 @@
 import axios from 'axios';
-import { react, useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
 
 const LoginForm = ({setUser, user}) => {
+    // Initialize variables
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
 
-
+    // Function to retrieve user id from api
     const getUserID = async (username) => {
         const userID = await axios.get("http://localhost:5000/user/" + username)
         return userID
     }
 
+    // Function to log in user
      const loginUser = async (e) => {
         e.preventDefault();
 
@@ -21,7 +23,9 @@ const LoginForm = ({setUser, user}) => {
             username: username,
             password: password
         }
-    
+        
+        /* Api call returns {authorized: true} if credentials match 
+        and {authorized: false} if they dont */
         axios.defaults.baseURL = ''
         axios.defaults.withCredentials = true
         const loggedIn = await axios.post("http://localhost:5000/login", body, {
@@ -33,7 +37,8 @@ const LoginForm = ({setUser, user}) => {
         .catch(err => {
             throw (err)
         });
-        console.log(loggedIn)
+
+        // if credentials matched save user info to localstorage and redirect to home
         if (loggedIn.authorized === true) {
             const userID = await getUserID(username)
             localStorage.setItem("user", JSON.stringify(userID.data))
@@ -45,7 +50,7 @@ const LoginForm = ({setUser, user}) => {
        
     } 
 
-
+    // return html for login page
     return (
         <>
             <div>

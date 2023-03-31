@@ -46,6 +46,7 @@ app.use(session({
     resave: false
 }));
 
+/*----------------Begin passport initialization and config--------------------*/
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -84,15 +85,9 @@ passport.use(new LocalStrategy( async (username, password, done) => {
     })
 );
 
+/*------------------End passport initialization and config----------------------*/
 
-app.put("/pokemon", (req, res) => {
-    userID = req.body.userID
-    pokemonID = req.body.pokemonID
-    updatePokemonUsers(userID, pokemonID, (results) => {
-        res.send('success')
-    })
-})
-
+// Route to get user information from database by given username
 app.get('/user/:username', (req, res) => {
 
     getUserFromDBByUsername(req.params.username, async (user) => {
@@ -113,12 +108,14 @@ app.get('/user/:username', (req, res) => {
     })
 })
 
+// Route to retrieve all data on all pokemon for user with given id
 app.get('/home', (req, res) => {
     getPokemon(req.query.userID, (results) => {
         res.json(results)
     })
 })
 
+// Route to retrieve all data on all caught pokemon for user with given id
 app.get("/uncaught/:id", (req, res) => {
     getUnCaught(req.params.id, (results) => {
         try {
@@ -134,6 +131,7 @@ app.get("/uncaught/:id", (req, res) => {
     })
 })
 
+// Route to retrieve all data on all caught pokemon for user with given id
 app.get("/caught/:id", (req, res) => {
     getCaught(req.params.id, (results) => {
         try {
@@ -149,6 +147,7 @@ app.get("/caught/:id", (req, res) => {
     })
 })
 
+// Route to retrieve all data on one pokemon by name for user with given id
 app.get('/pokemon/:name/:id', (req, res) => {
 
     getPokemonByName(req.params.name, req.params.id, (results) => {
@@ -165,6 +164,7 @@ app.get('/pokemon/:name/:id', (req, res) => {
     })
 })
 
+// Route to retrieve all data on all pokemon of given type for user with given id
 app.get('/type/:type/:id', (req, res) => {
     
     sortPokemonType(req.params.type, req.params.id, async (results) => {
@@ -182,16 +182,19 @@ app.get('/type/:type/:id', (req, res) => {
     })
 })
 
+// Route for failed authorization
 app.get('/', (req, res) => {
     res.set({"Content-Type": "application/json"})
     res.json({authorized: false})
 })
 
+// Route for successful authorization
 app.get('/auth', (req, res) => {
     res.set({"Content-Type": "application/json"})
     res.json({authorized: true})
 })
 
+// Route for logging in user using passport
 app.post('/login', passport.authenticate('local', { failureRedirect: '/'}),
  (req, res) => {
     req.login(req.user, err => {
@@ -199,11 +202,20 @@ app.post('/login', passport.authenticate('local', { failureRedirect: '/'}),
             throw err
         }
     })
-    console.log(req.user)
     res.redirect('/auth')
 })
 
+// Route used to save new user info into database
 app.post('/register', registerUser)
+
+// Route to update caught status of pokemon with given id for user with given id
+app.put("/pokemon", (req, res) => {
+    userID = req.body.userID
+    pokemonID = req.body.pokemonID
+    updatePokemonUsers(userID, pokemonID, (results) => {
+        res.send('success')
+    })
+})
 
 
 
