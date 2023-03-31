@@ -4,7 +4,11 @@ const session = require('express-session')
 const passport = require('passport');
 const bcrypt = require('bcrypt')
 const LocalStrategy = require('passport-local').Strategy
-const { checkAuthenticated, getUserFromDBByUsername, getUserFromDB, getPokemon, updatePokemonUsers } = require('./helper')
+const { checkAuthenticated, getUnCaught,
+    getCaught, sortPokemonType, 
+    getUserFromDBByUsername, getUserFromDB, 
+    getPokemon, updatePokemonUsers, 
+    getPokemonByName } = require('./helper')
 const dotenv = require('dotenv').config
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -90,7 +94,7 @@ app.put("/pokemon", (req, res) => {
 })
 
 app.get('/user/:username', (req, res) => {
-    
+
     getUserFromDBByUsername(req.params.username, async (user) => {
         user = user[0]
         try {
@@ -110,9 +114,71 @@ app.get('/user/:username', (req, res) => {
 })
 
 app.get('/home', (req, res) => {
-    console.log(req.query.userID)
     getPokemon(req.query.userID, (results) => {
         res.json(results)
+    })
+})
+
+app.get("/uncaught/:id", (req, res) => {
+    getUnCaught(req.params.id, (results) => {
+        try {
+            if (!results) {
+                res.send({})
+            } else {
+                res.json(results)
+            }
+        }
+        catch (err) {
+            throw (err)
+        }
+    })
+})
+
+app.get("/caught/:id", (req, res) => {
+    getCaught(req.params.id, (results) => {
+        try {
+            if (!results) {
+                res.send({})
+            } else {
+                res.json(results)
+            }
+        }
+        catch (err) {
+            throw (err)
+        }
+    })
+})
+
+app.get('/pokemon/:name/:id', (req, res) => {
+
+    getPokemonByName(req.params.name, req.params.id, (results) => {
+        try {
+            if (!results) {
+                res.send({})
+            } else {
+                res.json(results)
+            }
+        }
+        catch (err) {
+            throw (err)
+        }
+    })
+})
+
+app.get('/type/:type/:id', (req, res) => {
+    
+    sortPokemonType(req.params.type, req.params.id, async (results) => {
+        console.log(req.params.type, req.params.id)
+        try {
+            if (!results) {
+                res.send({})
+            } else {
+                res.json(results)
+            }
+        }
+        catch (err) {
+            throw(err)
+        }
     })
 })
 

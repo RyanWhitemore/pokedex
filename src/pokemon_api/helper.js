@@ -10,6 +10,82 @@ const con = mysql.createConnection({
     password: pass
 });
 
+const getUnCaught = (id, callback) => {
+    const results = con.query(`
+        SELECT pokemon_users.is_caught,
+            pokemon.pokemon_id,
+            pokemon.pokemon_name,
+            pokemon.region,
+            pokemon.type 
+        FROM pokemon_users
+        INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
+        where user_id = ? AND pokemon_users.is_caught = 0
+        `, id, (error, results) => {
+        if (error) {
+            throw (error)
+        } else {
+            return callback(results)
+        }
+    })
+}
+
+
+const getCaught = (id, callback) => {
+    const results = con.query(`
+        SELECT pokemon_users.is_caught,
+            pokemon.pokemon_id,
+            pokemon.pokemon_name,
+            pokemon.region,
+            pokemon.type 
+        FROM pokemon_users
+        INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
+        where user_id = ? AND pokemon_users.is_caught = 1
+        `, id, (error, results) => {
+        if (error) {
+            throw (error)
+        } else {
+            return callback(results)
+        }
+    })
+}
+
+const sortPokemonType = (type, userID, callback) => {
+    const results = con.query(`
+    SELECT pokemon_users.is_caught,
+	    pokemon.pokemon_id,
+        pokemon.pokemon_name,
+        pokemon.region,
+        pokemon.type
+    FROM pokemon_users
+    INNER JOIN pokemon on pokemon_users.pokemon_id = pokemon.pokemon_id
+    WHERE pokemon_users.user_id = ${con.escape(parseInt(userID))} 
+    AND pokemon.type LIKE ${con.escape("%" + type + "%")}
+    `, (error, results) => {
+        if (error) {
+            throw(error)
+        } else {
+            return callback(results)
+        }
+    })
+}
+
+const getPokemonByName = (pokemonName, userID, callback) => {
+    const results = con.query(`
+    SELECT pokemon_users.is_caught,
+        pokemon.pokemon_id,
+        pokemon.pokemon_name,
+        pokemon.region,
+        pokemon.type
+    FROM pokemon_users
+    INNER JOIN pokemon on pokemon_users.pokemon_id = pokemon.pokemon_id
+    WHERE pokemon_name = '${pokemonName}' AND user_id = ${userID}`, (error, results) => {
+        if (error) {
+            throw(error)
+        } else {
+            return callback(results)
+        }
+    })
+}
 
 const getPokemon = (userID, callback) => {
     const results = con.query(`
@@ -82,5 +158,9 @@ module.exports = {
     getUserFromDB,
     getUserFromDBByUsername,
     getPokemon,
-    updatePokemonUsers
+    updatePokemonUsers,
+    getPokemonByName,
+    sortPokemonType,
+    getCaught,
+    getUnCaught
 }
