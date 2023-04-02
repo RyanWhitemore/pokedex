@@ -163,6 +163,15 @@ const getUserFromDBByUsername = (username, callback) => {
     });
 };
 
+const getPicUrls = (id, callback) => {
+    con.query('SELECT image FROM pokemon_images WHERE pokemon_id = ?', id, (err, results) => {
+        if (err) {
+            throw(err)
+        }
+        return callback(results)
+    })
+}
+
 
 module.exports = {
     checkAuthenticated,
@@ -173,5 +182,6 @@ module.exports = {
     getPokemonByName,
     sortPokemonType,
     getCaught,
-    getUnCaught
+    getUnCaught,
+    getPicUrls
 }

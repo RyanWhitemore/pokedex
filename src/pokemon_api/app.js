@@ -8,7 +8,7 @@ const { checkAuthenticated, getUnCaught,
     getCaught, sortPokemonType, 
     getUserFromDBByUsername, getUserFromDB, 
     getPokemon, updatePokemonUsers, 
-    getPokemonByName } = require('./helper')
+    getPokemonByName, getPicUrls } = require('./helper')
 const dotenv = require('dotenv').config
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -168,7 +168,6 @@ app.get('/pokemon/:name/:id', (req, res) => {
 app.get('/type/:type/:id', (req, res) => {
     
     sortPokemonType(req.params.type, req.params.id, async (results) => {
-        console.log(req.params.type, req.params.id)
         try {
             if (!results) {
                 res.send({})
@@ -192,6 +191,16 @@ app.get('/', (req, res) => {
 app.get('/auth', (req, res) => {
     res.set({"Content-Type": "application/json"})
     res.json({authorized: true})
+})
+
+app.get('/picUrls/:id', (req, res) => {
+    getPicUrls(req.params.id, (results) => {
+        if (!results) {
+            res.send("no content")
+        } else {
+            res.json(results)
+        }
+    })
 })
 
 // Route for logging in user using passport
