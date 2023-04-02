@@ -7,7 +7,6 @@ import Search from './Search'
 
 const Home = () => {
 
-
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
     
@@ -23,12 +22,12 @@ const Home = () => {
 
     const [search, setSearch] = useState('')
 
-    // list of pokemon types for sort functionality
+    /*------------------------ End initializing variables ------------------*/
+
+
+    /*----------------------- Begin controller functions ---------------------*/
     
-
-    // initialize list for type sort
-    const typeHtml = []
-
+     // Function to retrieve all pokemon data from database via api
     const getPokemon = async () => {
         
         if (!user) {
@@ -47,6 +46,7 @@ const Home = () => {
        
     }
 
+    // Function to sort pokemon by dropdown option
     const handleDropdown = async (e) => {
         e.preventDefault()
 
@@ -84,29 +84,12 @@ const Home = () => {
         setPokemon(results.data)
     }
 
-    // initialize list for pokemon table
-    const pokemonHtml = []
-    /*--------------------- End initailizing variables ---------------------*/
-
-    /*--------------------- Begin populating html lists ------------------- */
-    // create a row for each pokemon and push it to pokemonList
-    
-
-    // Create a dropdown option for each type
-    
-    /*----------------------- End populating html lists ----------------------*/
 
     // On page load retrieve all pokemon from database
     useEffect(() => {
         getPokemon()
     }, []
     )
-
-    /*----------------------- Begin controller functions ---------------------*/
-    // Function to retrieve all pokemon data from database via api
-    
-        
-    
     
 
     // function to log user out
@@ -126,10 +109,6 @@ const Home = () => {
         setPokemon(results.data)
 
     }
-    
-
-    // Function to sort pokemon by dropdown option
-    
 
     // Function to change the caught status of pokemon when box checked
     const handleChange = async (pokemon_id) => {

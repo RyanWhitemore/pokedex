@@ -13,7 +13,9 @@ const dotenv = require('dotenv').config
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+/*-------------------------- End Imports -------------------------------------*/
 
+/*------------------------------- Begin express config ------------------------*/
 const app = express()
 const port = 5000
 const secret = process.env.SECRET
@@ -37,14 +39,13 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use(cookieParser(secret))
-
 app.use(session({
     secret: secret,
     cookie: {maxAge: 60 * 60 * 1000, sameSite: 'none', httpOnly: true, secure: true},
     saveUninitialized: false,
     resave: false
 }));
+/*---------------------------- End express config -----------------------------*/
 
 /*----------------Begin passport initialization and config--------------------*/
 app.use(passport.initialize());
@@ -193,6 +194,7 @@ app.get('/auth', (req, res) => {
     res.json({authorized: true})
 })
 
+// Route for retrieving photo urls from database 
 app.get('/picUrls/:id', (req, res) => {
     getPicUrls(req.params.id, (results) => {
         if (!results) {
