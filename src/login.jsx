@@ -7,6 +7,7 @@ const LoginForm = ({setUser, user}) => {
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [auth, setAuth] = useState('');
 
 
     // Function to retrieve user id from api
@@ -39,9 +40,10 @@ const LoginForm = ({setUser, user}) => {
         });
 
         // if credentials matched save user info to localstorage and redirect to home
-        if (loggedIn.authorized === true) {
+        if (loggedIn) {
             const userID = await getUserID(username)
             localStorage.setItem("user", JSON.stringify(userID.data))
+            localStorage.setItem("auth", loggedIn.data)
             setUser(userID.data)
             return navigate("/home")
         } else {

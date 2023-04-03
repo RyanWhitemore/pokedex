@@ -1,18 +1,16 @@
 const express = require('express');
-const { registerUser } = require('./routeFunctions')
+const { registerUser, returnResults } = require('./routeFunctions')
 const session = require('express-session')
-const passport = require('passport');
-const bcrypt = require('bcrypt')
-const LocalStrategy = require('passport-local').Strategy
-const { checkAuthenticated, getUnCaught,
+const { getUnCaught,
     getCaught, sortPokemonType, 
-    getUserFromDBByUsername, getUserFromDB, 
+    getUserFromDBByUsername, 
     getPokemon, updatePokemonUsers, 
     getPokemonByName, getPicUrls } = require('./helper')
 const dotenv = require('dotenv').config
-const bodyParser = require('body-parser')
 const cors = require('cors')
-const cookieParser = require('cookie-parser')
+const jwt = require('jsonwebtoken')
+const passport = require("passport")
+require('./passportConfig')
 /*-------------------------- End Imports -------------------------------------*/
 
 /*------------------------------- Begin express config ------------------------*/
@@ -25,7 +23,7 @@ const corsConfig = {
     Credentials: true,
 }
 
-app.use(bodyParser.urlencoded())
+app.use(express.urlencoded())
 app.use(express.text())
 app.options('*', cors(corsConfig))
 app.use((req, res, next) => {
@@ -41,7 +39,7 @@ app.use((req, res, next) => {
 
 app.use(session({
     secret: secret,
-    cookie: {maxAge: 60 * 60 * 1000, sameSite: 'none', httpOnly: true, secure: true},
+    cookie: {maxAge: 60 * 60 * 1000, sameSite: 'none', httpOnly: true, secure: false},
     saveUninitialized: false,
     resave: false
 }));
@@ -51,40 +49,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => {
-    done(null, user.user_id)
-})
 
-passport.deserializeUser((id, done) => {
-    user = getUserFromDB(id, async (user) => {
-        if (!user) {
-            return done(null, false);
-        }
-        return done(null, user);
-    });
-    
-})
-
-passport.use(new LocalStrategy( async (username, password, done) => {
-    getUserFromDBByUsername(username, async (user) => {
-        user = user[0]
-        try {
-            if (!user) {
-                return done(null, false)
-            }
-            const passwordMatched = await bcrypt.compare(password, user.password);
-            if (passwordMatched) {
-                console.log('password matched')
-                return done(null, user)
-            } else {
-                return done(null, false)
-            }
-        } catch(error) {
-            console.log(error)
-        }
-        })     
-    })
-);
+const jwtRequired = passport.authenticate('jwt', {session: false})
 
 /*------------------End passport initialization and config----------------------*/
 
@@ -93,19 +59,7 @@ app.get('/user/:username', (req, res) => {
 
     getUserFromDBByUsername(req.params.username, async (user) => {
         user = user[0]
-        try {
-            if (!user) {
-                res.sendStatus(404, "user not found")
-            } else {
-                res.send({
-                    user_id: user.user_id,
-                    username: user.username,    
-                })
-            }
-        }
-        catch (err) {
-            throw (err)
-        }
+        returnResults(res, user)
     })
 })
 
@@ -119,49 +73,21 @@ app.get('/home', (req, res) => {
 // Route to retrieve all data on all caught pokemon for user with given id
 app.get("/uncaught/:id", (req, res) => {
     getUnCaught(req.params.id, (results) => {
-        try {
-            if (!results) {
-                res.send({})
-            } else {
-                res.json(results)
-            }
-        }
-        catch (err) {
-            throw (err)
-        }
+        returnResults(res, results)
     })
 })
 
 // Route to retrieve all data on all caught pokemon for user with given id
 app.get("/caught/:id", (req, res) => {
     getCaught(req.params.id, (results) => {
-        try {
-            if (!results) {
-                res.send({})
-            } else {
-                res.json(results)
-            }
-        }
-        catch (err) {
-            throw (err)
-        }
+        returnResults(res, results)
     })
 })
 
 // Route to retrieve all data on one pokemon by name for user with given id
 app.get('/pokemon/:name/:id', (req, res) => {
-
-    getPokemonByName(req.params.name, req.params.id, (results) => {
-        try {
-            if (!results) {
-                res.send({})
-            } else {
-                res.json(results)
-            }
-        }
-        catch (err) {
-            throw (err)
-        }
+    getPokemonByName(req.params.name, req.params.id, results => {
+        returnResults(res, results)
     })
 })
 
@@ -169,16 +95,7 @@ app.get('/pokemon/:name/:id', (req, res) => {
 app.get('/type/:type/:id', (req, res) => {
     
     sortPokemonType(req.params.type, req.params.id, async (results) => {
-        try {
-            if (!results) {
-                res.send({})
-            } else {
-                res.json(results)
-            }
-        }
-        catch (err) {
-            throw(err)
-        }
+      returnResults(res, results)
     })
 })
 
@@ -189,7 +106,7 @@ app.get('/', (req, res) => {
 })
 
 // Route for successful authorization
-app.get('/auth', (req, res) => {
+app.get('/auth', jwtRequired, (req, res) => {
     res.set({"Content-Type": "application/json"})
     res.json({authorized: true})
 })
@@ -197,23 +114,18 @@ app.get('/auth', (req, res) => {
 // Route for retrieving photo urls from database 
 app.get('/picUrls/:id', (req, res) => {
     getPicUrls(req.params.id, (results) => {
-        if (!results) {
-            res.send("no content")
-        } else {
-            res.json(results)
-        }
+       returnResults(res, results)
     })
 })
 
 // Route for logging in user using passport
 app.post('/login', passport.authenticate('local', { failureRedirect: '/'}),
  (req, res) => {
-    req.login(req.user, err => {
-        if (err) {
-            throw err
-        }
-    })
-    res.redirect('/auth')
+    
+    const userReturnObject = {username: req.username}
+    req.session.jwt = jwt.sign(userReturnObject,
+        process.env.JWT_SECRET_KEY);
+    res.send(req.session.jwt)
 })
 
 // Route used to save new user info into database
@@ -227,8 +139,6 @@ app.put("/pokemon", (req, res) => {
         res.send('success')
     })
 })
-
-
 
 
 app.listen(port, () => {
