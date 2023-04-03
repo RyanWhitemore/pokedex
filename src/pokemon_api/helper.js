@@ -133,14 +133,6 @@ const updatePokemonUsers = (userID, pokemonID, callback) => {
     callback(results)
 }
 
-// Function to check if user is authenticated
-const checkAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next()
-    }
-    console.log(req.isAuthenticated())
-    res.redirect('/')
-};
 
 // Query that returns all data on user with given id
 const getUserFromDB = (id, callback) => {
@@ -174,7 +166,6 @@ const getPicUrls = (id, callback) => {
 
 
 module.exports = {
-    checkAuthenticated,
     getUserFromDB,
     getUserFromDBByUsername,
     getPokemon,

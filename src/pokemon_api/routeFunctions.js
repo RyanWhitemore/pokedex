@@ -45,9 +45,23 @@ const registerUser = async (req, res) => {
     })
 }
 
+const returnResults = (res, results) => {
+    try {
+        if (!results) {
+            res.send({})
+        } else {
+            res.json(results)
+        }
+    }
+    catch (err) {
+        throw (err)
+    }
+}
+
 
 module.exports = {
-    registerUser
+    registerUser,
+    returnResults
 }
 
 
