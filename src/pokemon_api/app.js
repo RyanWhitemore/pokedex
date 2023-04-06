@@ -1,6 +1,7 @@
 const express = require('express');
 const { registerUser, returnResults } = require('./routeFunctions')
 const session = require('express-session')
+const cookieParser = require('cookie-parser')
 const { getUnCaught,
     getCaught, sortPokemonType, 
     getUserFromDBByUsername, 
@@ -18,28 +19,20 @@ const app = express()
 const port = 5000
 const secret = process.env.SECRET
 
+
 const corsConfig = {
-    origin: true,
-    Credentials: true,
+    origin: "http://localhost:3000",
+    credentials: true,
 }
 
 app.use(express.urlencoded())
 app.use(express.text())
-app.options('*', cors(corsConfig))
-app.use((req, res, next) => {
-    if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-        return res.status(200)
-    }
-    
-    res.append('Access-Control-Allow-Origin', ['http://localhost:3000'])
-    res.append("Access-Control-Allow-Credentials", [true])
-    next()
-})
+
+
 
 app.use(session({
     secret: secret,
-    cookie: {maxAge: 60 * 60 * 1000, sameSite: 'none', httpOnly: true, secure: false},
+    cookie: {maxAge: 60 * 60 * 1000, sameSite: 'lax', httpOnly: true, secure: false},
     saveUninitialized: false,
     resave: false
 }));
@@ -48,7 +41,8 @@ app.use(session({
 /*----------------Begin passport initialization and config--------------------*/
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(cors(corsConfig))
+app.use(cookieParser())
 
 const jwtRequired = passport.authenticate('jwt', {session: false})
 
@@ -94,20 +88,19 @@ app.get('/pokemon/:name/:id', (req, res) => {
 // Route to retrieve all data on all pokemon of given type for user with given id
 app.get('/type/:type/:id', (req, res) => {
     
-    sortPokemonType(req.params.type, req.params.id, async (results) => {
+    sortPokemonType(req.params.type, req.params.id, (results) => {
       returnResults(res, results)
     })
 })
 
 // Route for failed authorization
 app.get('/', (req, res) => {
-    res.set({"Content-Type": "application/json"})
     res.json({authorized: false})
 })
 
 // Route for successful authorization
 app.get('/auth', jwtRequired, (req, res) => {
-    res.set({"Content-Type": "application/json"})
+    console.log(req.session.jwt)
     res.json({authorized: true})
 })
 
@@ -119,13 +112,13 @@ app.get('/picUrls/:id', (req, res) => {
 })
 
 // Route for logging in user using passport
-app.post('/login', passport.authenticate('local', { failureRedirect: '/'}),
+app.post('/login',  passport.authenticate('local', { failureRedirect: '/'}),
  (req, res) => {
-    
     const userReturnObject = {username: req.username}
     req.session.jwt = jwt.sign(userReturnObject,
         process.env.JWT_SECRET_KEY);
-    res.send(req.session.jwt)
+    const jwt = req.session.jwt
+   return res.send(jwt)
 })
 
 // Route used to save new user info into database
