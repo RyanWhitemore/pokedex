@@ -43,7 +43,7 @@ const LoginForm = ({setUser, user}) => {
         if (loggedIn) {
             const userID = await getUserID(username)
             localStorage.setItem("user", JSON.stringify(userID.data))
-            localStorage.setItem("auth", loggedIn.data)
+            localStorage.setItem("auth", loggedIn)
             setUser(userID.data)
             return navigate("/home")
         } else {
