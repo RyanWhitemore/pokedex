@@ -40,14 +40,14 @@ const LoginForm = ({setUser, user}) => {
         });
 
         // if credentials matched save user info to localstorage and redirect to home
-        if (loggedIn) {
+        if (loggedIn.authorized) {
             const userID = await getUserID(username)
             localStorage.setItem("user", JSON.stringify(userID.data))
             localStorage.setItem("auth", loggedIn)
             setUser(userID.data)
             return navigate("/home")
         } else {
-            console.log('this isnt working')
+            console.log(loggedIn)
         }
        
     } 

@@ -155,11 +155,35 @@ const getUserFromDBByUsername = (username, callback) => {
     });
 };
 
-const getPicUrls = (id, callback) => {
+// Query to return all urls for pokemon pictures
+const getPicUrls = async (id, callback) => {
     con.query('SELECT image FROM pokemon_images WHERE pokemon_id = ?', id, (err, results) => {
         if (err) {
             throw(err)
         }
+        return callback(results)
+    })
+}
+
+// Query to update value of profile_pic in database
+const updateProfilePic = (userID, url) => {
+    con.query(`
+        UPDATE users
+        SET profile_pic = ?
+        WHERE user_id = ? 
+    `, [url, userID])
+}
+
+// Query to get profile picture url from database
+const getProfilePic = (userID, callback) => {
+    const results = con.query(`
+        SELECT profile_pic
+        FROM users
+        WHERE user_id = ?
+    `, userID, (err, results) => {
+        if (err) {
+            throw(err)
+        } else 
         return callback(results)
     })
 }
@@ -174,5 +198,7 @@ module.exports = {
     sortPokemonType,
     getCaught,
     getUnCaught,
-    getPicUrls
+    getPicUrls,
+    updateProfilePic,
+    getProfilePic
 }

@@ -4,6 +4,7 @@ import { useNavigate, Route, Routes, BrowserRouter, Navigate, Link } from 'react
 const { LoginForm } = require("./login.jsx")
 const { Register } = require("./register.jsx")
 const { Home } = require('./Home.jsx')
+const { Profile } = require('./Profile.jsx')
 
 
 
@@ -18,6 +19,7 @@ const App = () => {
                     <Route exact path="/" element={<LoginForm setUser={setUser} user={user}/>}/>
                     <Route exact path="/register" element={<Register/>}/>
                     <Route exact path="/home" element={<Home setUser={setUser} user={user}/>}/>
+                    <Route exact path="/profile" element={<Profile/>}/>
                 </Routes>
             </BrowserRouter>
         </>

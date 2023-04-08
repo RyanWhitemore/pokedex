@@ -6,13 +6,25 @@ const { getUnCaught,
     getCaught, sortPokemonType, 
     getUserFromDBByUsername, 
     getPokemon, updatePokemonUsers, 
-    getPokemonByName, getPicUrls } = require('./helper')
+    getPokemonByName, getPicUrls,
+    getProfilePic, updateProfilePic } = require('./helper')
 const dotenv = require('dotenv').config
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const passport = require("passport")
+const AWS = require('aws-sdk')
+const fs = require('fs')
 require('./passportConfig')
+
 /*-------------------------- End Imports -------------------------------------*/
+
+AWS.config.update({
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION,
+    signatureVersion: process.env.SIGNATURE_VERSION
+})
+
 
 /*------------------------------- Begin express config ------------------------*/
 const app = express()
@@ -25,14 +37,15 @@ const corsConfig = {
     credentials: true,
 }
 
-app.use(express.urlencoded())
-app.use(express.text())
+app.use(express.urlencoded({limit: "50mb"}))
+app.use(express.text({limit: "50mb"}))
+app.use(express.json({limit: "50mb"}))
 
 
 
 app.use(session({
     secret: secret,
-    cookie: {maxAge: 60 * 60 * 1000, sameSite: 'lax', httpOnly: true, secure: false},
+    cookie: {maxAge: 60 * 60 * 1000, sameSite: 'lax', httpOnly: true, secure: true},
     saveUninitialized: false,
     resave: false
 }));
@@ -48,6 +61,7 @@ const jwtRequired = passport.authenticate('jwt', {session: false})
 
 /*------------------End passport initialization and config----------------------*/
 
+
 // Route to get user information from database by given username
 app.get('/user/:username', (req, res) => {
 
@@ -55,6 +69,42 @@ app.get('/user/:username', (req, res) => {
         user = user[0]
         returnResults(res, user)
     })
+})
+
+app.get("/profilePic/:userID", (req, res) => {
+    getProfilePic(req.params.userID, (results) => {
+        returnResults(res, results)
+    })
+})
+
+app.put("/profilePic", async (req, res) => {
+    const s3 = new AWS.S3();
+    const userID = req.body.userID;
+    const buffer = Buffer.from(req.body.file.replace(/^data:image\/\w+;base64,/, ""),'base64')
+
+    getProfilePic(userID, (results) => {
+        const key = results[0].profile_pic.match(/\.com\/(.*)/)[1]
+        const params = {Bucket: process.env.BUCKET, Key: key}
+        s3.deleteObject(params, (err, data) => {
+            if (err) {
+                console.log(err)
+            } else {
+                return
+            }
+        })
+    })
+
+
+    const params = {
+        Bucket: "pokedexpictures",
+        Key: `profilePictures/${userID}${Date.now()}.png`,
+        Body: buffer
+    };
+
+    const { Location } = await s3.upload(params).promise()
+
+    updateProfilePic(userID, Location)
+    res.json({Location: Location})
 })
 
 // Route to retrieve all data on all pokemon for user with given id
@@ -117,8 +167,8 @@ app.post('/login',  passport.authenticate('local', { failureRedirect: '/'}),
     const userReturnObject = {username: req.username}
     req.session.jwt = jwt.sign(userReturnObject,
         process.env.JWT_SECRET_KEY);
-    const jwt = req.session.jwt
-   return res.send(jwt)
+    const jwtToken = req.session.jwt
+   return res.send({authorized: true})
 })
 
 // Route used to save new user info into database

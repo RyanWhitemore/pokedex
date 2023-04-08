@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import TableContents from './TableContents'
 import TableRows from './TableRows'
 import Search from './Search'
@@ -21,6 +21,8 @@ const Home = () => {
     const [ pokemon, setPokemon ] = useState([''])
 
     const [search, setSearch] = useState('')
+
+    const [ imageUrl, setImageUrl ] = useState(null)
 
     /*------------------------ End initializing variables ------------------*/
 
@@ -85,9 +87,21 @@ const Home = () => {
     }
 
 
+    const getProfilePic = async () => {
+        const profilePic = await axios.get(`
+            http://localhost:5000/profilePic/` 
+            + user.user_id)
+        if (!profilePic.data[0].profile_pic) {
+            return setImageUrl("./profileDefault.png")
+        } else {
+            setImageUrl(profilePic.data[0].profile_pic)
+        }
+    }
+
     // On page load retrieve all pokemon from database
     useEffect(() => {
         getPokemon()
+        getProfilePic()
     }, []
     )
     
@@ -128,7 +142,11 @@ const Home = () => {
     /*--------------------------- Return final html --------------------------*/
     return (
         <>
-            <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>
+            <div class="profile">
+                <img src={imageUrl} height="100px" width="100px"/>
+                <Link id="profile" class="profile" to="/profile">Profile</Link>
+            </div>
+                <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>
            <Search submitSearch={submitSearch} setSearch={setSearch}/>
             <button  id="logout" onClick={(e) => logout(e)}>logout</button>
             <table>

@@ -31,3 +31,16 @@ th, td {
     top: 6px;
     right: 20px;
 }
+
+div.profile {
+    margin-left: auto;
+    vertical-align: top;
+    text-align: center;
+    width: 120px;
+}
+
+div.profile-page {
+    margin: auto;
+    vertical-align: top;
+    text-align: center;
+}
