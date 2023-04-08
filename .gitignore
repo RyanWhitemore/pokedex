@@ -12,7 +12,8 @@
 /build
 
 # misc
-.env
+/src/pokemon_api/.env
+/src/.env
 .DS_Store
 .env.local
 .env.development.local
