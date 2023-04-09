@@ -18,6 +18,7 @@ require('./passportConfig')
 
 /*-------------------------- End Imports -------------------------------------*/
 
+/*------------------------------AWS Config-------------------------------------*/
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -71,17 +72,24 @@ app.get('/user/:username', (req, res) => {
     })
 })
 
+// Route to get profile pic url from database for user with given id
 app.get("/profilePic/:userID", (req, res) => {
     getProfilePic(req.params.userID, (results) => {
         returnResults(res, results)
     })
 })
 
+// Route to update profile picture
 app.put("/profilePic", async (req, res) => {
     const s3 = new AWS.S3();
     const userID = req.body.userID;
-    const buffer = Buffer.from(req.body.file.replace(/^data:image\/\w+;base64,/, ""),'base64')
 
+    // image comes as base64 use buffer to translate before upload
+    const buffer = Buffer.from(req.body.file.replace(
+        /^data:image\/\w+;base64,/, ""),'base64')
+
+    /*  Get current profile picture url from database 
+    then delete picture from s3 bucket*/
     getProfilePic(userID, (results) => {
         const key = results[0].profile_pic.match(/\.com\/(.*)/)[1]
         const params = {Bucket: process.env.BUCKET, Key: key}
