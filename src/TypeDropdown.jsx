@@ -19,12 +19,12 @@ const TypeDropdown = ({ handleDropdown }, props) => {
     return (
         <>
             <div>
-                    <select onChange={(e) => handleDropdown(e)} name="type" id="type">
-                        <option key="default" value="" defaultValue={""}>Type</option>
-                        <option key="all" value="">All</option>
-                        {typeHtml}
-                    </select>
-                </div>
+                <select onChange={(e) => handleDropdown(e)} name="type" id="type">
+                    <option key="default" value="" defaultValue={""}>Type</option>
+                    <option key="all" value="">All</option>
+                    {typeHtml}
+                </select>
+            </div>
         </>
     )
 }

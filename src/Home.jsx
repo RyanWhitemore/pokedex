@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import TableContents from './TableContents'
 import TableRows from './TableRows'
 import Search from './Search'
+import ExclusiveDropdown from './ExclusiveDropdown'
 
 const Home = () => {
 
@@ -102,6 +103,7 @@ const Home = () => {
     useEffect(() => {
         getPokemon()
         getProfilePic()
+        console.log(pokemon)
     }, []
     )
     
@@ -142,16 +144,20 @@ const Home = () => {
     /*--------------------------- Return final html --------------------------*/
     return (
         <>
-            <div class="profile">
+            <div className="profile">
                 <img src={imageUrl} height="100px" width="100px"/>
-                <Link id="profile" class="profile" to="/profile">Profile</Link>
+                <Link id="profile" className="profile" to="/profile">Profile</Link>
             </div>
                 <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>
            <Search submitSearch={submitSearch} setSearch={setSearch}/>
             <button  id="logout" onClick={(e) => logout(e)}>logout</button>
             <table>
                 <tbody>
-                    <TableContents handleDropdown={handleDropdown}/>
+                    <TableContents 
+                    getPokemon={getPokemon}
+                    pokemon={pokemon}
+                    setPokemon={setPokemon}
+                    handleDropdown={handleDropdown}/>
                     <TableRows pokemon={pokemon} handleChange={handleChange}/>
                 </tbody>
             </table>

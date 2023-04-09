@@ -7,7 +7,8 @@ const { getUnCaught,
     getUserFromDBByUsername, 
     getPokemon, updatePokemonUsers, 
     getPokemonByName, getPicUrls,
-    getProfilePic, updateProfilePic } = require('./helper')
+    getProfilePic, updateProfilePic,
+    getExclusive } = require('./helper')
 const dotenv = require('dotenv').config
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
@@ -102,7 +103,6 @@ app.put("/profilePic", async (req, res) => {
         })
     })
 
-
     const params = {
         Bucket: "pokedexpictures",
         Key: `profilePictures/${userID}${Date.now()}.png`,
@@ -113,6 +113,12 @@ app.put("/profilePic", async (req, res) => {
 
     updateProfilePic(userID, Location)
     res.json({Location: Location})
+})
+
+app.get("/version/:version/:userID", (req, res) => {
+    getExclusive(req.params.userID, req.params.version, (results) => {
+        returnResults(res, results)
+    })
 })
 
 // Route to retrieve all data on all pokemon for user with given id

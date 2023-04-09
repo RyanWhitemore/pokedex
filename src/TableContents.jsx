@@ -1,8 +1,9 @@
 import Image from "./Image";
 import CaughtDropdown from "./CaughtDropdown";
 import TypeDropdown from "./TypeDropdown";
+import ExclusiveDropdown from "./ExclusiveDropdown";
 
-const TableContents = ({ handleDropdown }) => {
+const TableContents = ({ getPokemon, pokemon, setPokemon, handleDropdown }) => {
 
     return (
         <>
@@ -10,7 +11,10 @@ const TableContents = ({ handleDropdown }) => {
                 <th>Picture</th>
                 <th>Pokemon #</th>
                 <th>Pokemon Name</th>
-                <th>Area</th>
+                <th><ExclusiveDropdown
+                getPokemon={getPokemon} 
+                pokemon={pokemon} 
+                setPokemon={setPokemon}/></th>
                 <th><TypeDropdown handleDropdown={handleDropdown} /></th>
                 <th><CaughtDropdown handleDropdown={handleDropdown}/></th>
             </tr>

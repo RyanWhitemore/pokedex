@@ -93,6 +93,26 @@ const getPokemonByName = (pokemonName, userID, callback) => {
     })
 }
 
+const getExclusive = (userID, exclusive, callback) => {
+    con.query(`
+        SELECT pu.is_caught,
+            p.pokemon_id,
+            p.pokemon_name,
+            p.region,
+            p.type
+        FROM pokemon_users as pu
+        INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
+        WHERE pu.user_id = ? AND p.region LIKE ?
+    `, [userID, '%' + exclusive + '%'], (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            return callback(results)
+        }
+    } )
+
+}
+
 // Query that returns data on all pokemon for user with given id
 const getPokemon = (userID, callback) => {
     const results = con.query(`
@@ -200,5 +220,6 @@ module.exports = {
     getUnCaught,
     getPicUrls,
     updateProfilePic,
-    getProfilePic
+    getProfilePic,
+    getExclusive
 }

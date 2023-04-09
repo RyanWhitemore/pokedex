@@ -24,7 +24,7 @@ const Register = () => {
             }
         })
         .then(() => {
-            navigate('/login')
+            navigate('/')
         })
         
     }
