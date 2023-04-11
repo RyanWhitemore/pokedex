@@ -4,7 +4,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import TableContents from './TableContents'
 import TableRows from './TableRows'
 import Search from './Search'
-import ExclusiveDropdown from './ExclusiveDropdown'
+import VersionCheck from './VersionCheck'
+import ExclusiveDropdown from './AreaDropdown'
 
 const Home = () => {
 
@@ -149,6 +150,11 @@ const Home = () => {
                 <Link id="profile" className="profile" to="/profile">Profile</Link>
             </div>
                 <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>
+            <VersionCheck 
+                getPokemon={getPokemon}
+                setPokemon={setPokemon}
+                pokemon={pokemon}
+            />
            <Search submitSearch={submitSearch} setSearch={setSearch}/>
             <button  id="logout" onClick={(e) => logout(e)}>logout</button>
             <table>

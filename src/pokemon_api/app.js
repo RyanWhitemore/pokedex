@@ -8,7 +8,8 @@ const { getUnCaught,
     getPokemon, updatePokemonUsers, 
     getPokemonByName, getPicUrls,
     getProfilePic, updateProfilePic,
-    getExclusive } = require('./helper')
+    getExclusive, 
+    sortVersion} = require('./helper')
 const dotenv = require('dotenv').config
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
@@ -154,6 +155,13 @@ app.get('/type/:type/:id', (req, res) => {
     
     sortPokemonType(req.params.type, req.params.id, (results) => {
       returnResults(res, results)
+    })
+})
+
+app.get('/version/sort/:userID/:version', (req, res) => {
+
+    sortVersion(req.params.userID, req.params.version, (results) => {
+        returnResults(res, results)
     })
 })
 

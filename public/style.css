@@ -44,3 +44,9 @@ div.profile-page {
     vertical-align: top;
     text-align: center;
 }
+
+div.version-checks {
+    margin: auto;
+    vertical-align: top;
+    text-align: center;
+}

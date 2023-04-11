@@ -93,7 +93,49 @@ const getPokemonByName = (pokemonName, userID, callback) => {
     })
 }
 
-const getExclusive = (userID, exclusive, callback) => {
+const getExclusive = (userID, option, callback) => {
+    if (option === "scarlet" || option === "violet") {
+        con.query(`
+        SELECT pu.is_caught,
+            p.pokemon_id,
+            p.pokemon_name,
+            p.region,
+            p.type
+        FROM pokemon_users as pu
+        INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
+        WHERE pu.user_id = ? AND p.version = ?
+    `, [userID, option], (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            return callback(results)
+        }
+    } )
+    } else {
+        con.query(`
+            SELECT pu.is_caught,
+            p.pokemon_id,
+            p.pokemon_name,
+            p.region,
+            p.type
+        FROM pokemon_users as pu
+        INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
+        WHERE pu.user_id = ? AND p.region like ?
+        `, [userID, "%" + option + "%"], (error, results) => {
+            if (error) {
+                console.log(error)
+            } else {
+                return callback(results)
+            }
+        })
+    }
+
+}
+
+const sortVersion = (userID, version, callback) => {
+    if (version === "all") {
+        return getPokemon(userID, callback)
+    }
     con.query(`
         SELECT pu.is_caught,
             p.pokemon_id,
@@ -102,15 +144,14 @@ const getExclusive = (userID, exclusive, callback) => {
             p.type
         FROM pokemon_users as pu
         INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
-        WHERE pu.user_id = ? AND p.region LIKE ?
-    `, [userID, '%' + exclusive + '%'], (error, results) => {
+        WHERE pu.user_id = ? AND version in ('all', ?)
+    `, [userID, version], (error, results) => {
         if (error) {
             console.log(error)
         } else {
             return callback(results)
         }
-    } )
-
+    })
 }
 
 // Query that returns data on all pokemon for user with given id
@@ -221,5 +262,6 @@ module.exports = {
     getPicUrls,
     updateProfilePic,
     getProfilePic,
-    getExclusive
+    getExclusive,
+    sortVersion
 }
