@@ -14,16 +14,10 @@ const con = mysql.createConnection({
 
 /* Query that return data on all pokemon that 
 have not been caughtfor user with given id */
-const getUnCaught = (id, callback) => {
-    const results = con.query(`
-        SELECT pokemon_users.is_caught,
-            pokemon.pokemon_id,
-            pokemon.pokemon_name,
-            pokemon.region,
-            pokemon.type 
-        FROM pokemon_users
-        INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
-        where user_id = ? AND pokemon_users.is_caught = 0
+const getUnCaught = (id, version, callback) => {
+    con.query(`
+       SELECT * FROM ${id + version}
+       WHERE is_caught = 0
         `, id, (error, results) => {
         if (error) {
             throw (error)
@@ -34,17 +28,12 @@ const getUnCaught = (id, callback) => {
 }
 
 // Query that returns data on all caught pokemon for user with given id
-const getCaught = (id, callback) => {
-    const results = con.query(`
-        SELECT pokemon_users.is_caught,
-            pokemon.pokemon_id,
-            pokemon.pokemon_name,
-            pokemon.region,
-            pokemon.type 
-        FROM pokemon_users
-        INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
-        where user_id = ? AND pokemon_users.is_caught = 1
-        `, id, (error, results) => {
+const getCaught = (userID, version, callback) => {
+    
+        con.query(`
+        SELECT * FROM ${userID + version}
+        WHERE is_caught = 1
+        `, (error, results) => {
         if (error) {
             throw (error)
         } else {
@@ -54,17 +43,10 @@ const getCaught = (id, callback) => {
 }
 
 // Query that returns data on all pokemon with type value for user with given id
-const sortPokemonType = (type, userID, callback) => {
-    const results = con.query(`
-    SELECT pokemon_users.is_caught,
-	    pokemon.pokemon_id,
-        pokemon.pokemon_name,
-        pokemon.region,
-        pokemon.type
-    FROM pokemon_users
-    INNER JOIN pokemon on pokemon_users.pokemon_id = pokemon.pokemon_id
-    WHERE pokemon_users.user_id = ${con.escape(parseInt(userID))} 
-    AND pokemon.type LIKE ${con.escape("%" + type + "%")}
+const sortPokemonType = (type, userID, version, callback) => {
+    con.query(`
+    SELECT * FROM ${userID + version}
+    WHERE type LIKE ${con.escape("%" + type + "%")}
     `, (error, results) => {
         if (error) {
             throw(error)
@@ -93,7 +75,7 @@ const getPokemonByName = (pokemonName, userID, callback) => {
     })
 }
 
-const getExclusive = (userID, option, callback) => {
+const getArea = (userID, option, version, callback) => {
     if (option === "scarlet" || option === "violet") {
         con.query(`
         SELECT pu.is_caught,
@@ -111,17 +93,11 @@ const getExclusive = (userID, option, callback) => {
             return callback(results)
         }
     } )
-    } else {
+    }  else {
         con.query(`
-            SELECT pu.is_caught,
-            p.pokemon_id,
-            p.pokemon_name,
-            p.region,
-            p.type
-        FROM pokemon_users as pu
-        INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
-        WHERE pu.user_id = ? AND p.region like ?
-        `, [userID, "%" + option + "%"], (error, results) => {
+        SELECT * FROM ${userID + version}
+        WHERE region LIKE ?
+        `, ["%" + option + "%"], (error, results) => {
             if (error) {
                 console.log(error)
             } else {
@@ -132,11 +108,20 @@ const getExclusive = (userID, option, callback) => {
 
 }
 
+const dropViews = (userID) => {
+    con.query(`DROP VIEW IF EXISTS ${userID + "scarlet"}`)
+    con.query(`DROP VIEW IF EXISTS ${userID + "violet"}`)
+    con.query(`DROP VIEW IF EXISTS ${userID + 'all'}`)
+}
+
 const sortVersion = (userID, version, callback) => {
     if (version === "all") {
-        return getPokemon(userID, callback)
+        return getPokemon(userID, version, callback)
     }
+    dropViews(userID)
     con.query(`
+        CREATE VIEW ${userID + version}
+        AS
         SELECT pu.is_caught,
             p.pokemon_id,
             p.pokemon_name,
@@ -144,7 +129,10 @@ const sortVersion = (userID, version, callback) => {
             p.type
         FROM pokemon_users as pu
         INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
-        WHERE pu.user_id = ? AND version in ('all', ?)
+        WHERE pu.user_id = ? AND version in ('all', ?);
+    `, [userID, version])
+    con.query(`
+        SELECT * FROM ${userID + version}
     `, [userID, version], (error, results) => {
         if (error) {
             console.log(error)
@@ -155,17 +143,27 @@ const sortVersion = (userID, version, callback) => {
 }
 
 // Query that returns data on all pokemon for user with given id
-const getPokemon = (userID, callback) => {
-    const results = con.query(`
-        SELECT pokemon_users.is_caught,
-            pokemon.pokemon_id,
-            pokemon.pokemon_name,
-            pokemon.region,
-            pokemon.type 
-        FROM pokemon_users
-        INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
-        where user_id = ?
-        `, userID, (error, results) => {
+const getPokemon = (userID, version, callback) => {
+    
+
+    dropViews(userID)
+
+    con.query(`
+    CREATE VIEW ${userID + "all"} AS
+    SELECT pokemon_users.is_caught,
+        pokemon.pokemon_id,
+        pokemon.pokemon_name,
+        pokemon.region,
+        pokemon.type 
+    FROM pokemon_users
+    INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
+    where user_id = ?
+    `, userID, (error) => {
+    })
+    
+    con.query(`
+        SELECT * FROM ${userID + version}
+        `, (error, results) => {
         if (error) {
             throw (error)
         } else {
@@ -262,6 +260,6 @@ module.exports = {
     getPicUrls,
     updateProfilePic,
     getProfilePic,
-    getExclusive,
+    getArea,
     sortVersion
 }

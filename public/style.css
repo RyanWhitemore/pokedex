@@ -50,3 +50,10 @@ div.version-checks {
     vertical-align: top;
     text-align: center;
 }
+
+#login {
+    text-align: center;
+    top: 10%;
+    left: 43%;
+    position: fixed;
+}

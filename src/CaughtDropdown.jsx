@@ -1,7 +1,7 @@
-import axios from "axios"
+
 
 const CaughtDropdown = ({ handleDropdown }) => {
-        
+    
         return (
             <div>
                 <select onChange={(e) => handleDropdown(e)} name="caught">

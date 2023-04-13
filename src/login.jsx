@@ -8,6 +8,7 @@ const LoginForm = ({setUser, user}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [auth, setAuth] = useState('');
+    localStorage.setItem("version", "all")
 
 
     // Function to retrieve user id from api
@@ -44,7 +45,6 @@ const LoginForm = ({setUser, user}) => {
             const userID = await getUserID(username)
             localStorage.setItem("user", JSON.stringify(userID.data))
             localStorage.setItem("auth", loggedIn)
-            setUser(userID.data)
             return navigate("/home")
         } else {
             console.log(loggedIn)
@@ -55,10 +55,15 @@ const LoginForm = ({setUser, user}) => {
     // return html for login page
     return (
         <>
-            <div>
+            <div id="login">
+                <h1>Login</h1>
                 <form onSubmit={loginUser}>
-                    <input value={username} onChange={(e) => setUsername(e.target.value)} type='text'></input><br/>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type='password'></input><br/>
+                    <input value={username} placeholder="username" 
+                    onChange={(e) => setUsername(e.target.value)} 
+                    type='text'></input><br/>
+                    <input value={password} placeholder="password" 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    type='password'></input><br/>
                     <button type="submit">Login</button><br/>
                 </form>
                 <Link to="/register">register</Link>

@@ -5,7 +5,8 @@ const AreaDropdown = (props) => {
     const areaList = ["south province", "east province", "west province", 
         "north province", "tagtree thicket", "casseroya lake", "the pokemon league",
         "glaseado mountain", "great crater of paldea", "asado desert", 
-        "east paldean sea",  "west paldean sea", "south paldean sea"
+        "east paldean sea",  "west paldean sea", "south paldean sea",
+        "evolves"
     ]
  
 
@@ -14,11 +15,11 @@ const AreaDropdown = (props) => {
             return props.getPokemon()
         }
         try {
-            const results = await axios.get("http://localhost:5000/version/" +
+            const results = await axios.get("http://localhost:5000/area/" +
                 e.target.value + '/' +
-                JSON.parse(localStorage.getItem("user")).user_id)
-                console.log(results.data)
-                props.setPokemon(results.data)
+                JSON.parse(localStorage.getItem("user")).user_id + "/"
+                + localStorage.getItem("version"))
+            props.setPokemon(results.data)
             } catch (err) {
                 return
             }

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useState } from 'react'
 
 const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
-
+    
     const [checkedViolet, setCheckedViolet] = useState(false)
     const [checkedScarlet, setCheckedScarlet] = useState(false)
     const [checkedAll, setCheckedAll] = useState(true)
@@ -12,16 +12,19 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
         
         if (e.target.checked) {
             if (e.target.value === "scarlet") {
+                localStorage.setItem("version", "scarlet")
                 setCheckedScarlet(true)
                 setCheckedViolet(false)
                 setCheckedAll(false)
             }
             if (e.target.value === "violet") {
+                localStorage.setItem("version", "violet")
                 setCheckedViolet(true)
                 setCheckedScarlet(false)
                 setCheckedAll(false)
             }
             if (e.target.value === "all") {
+                localStorage.setItem("version", "all")
                 setCheckedAll(true)
                 setCheckedScarlet(false)
                 setCheckedViolet(false)

@@ -5,7 +5,6 @@ import TableContents from './TableContents'
 import TableRows from './TableRows'
 import Search from './Search'
 import VersionCheck from './VersionCheck'
-import ExclusiveDropdown from './AreaDropdown'
 
 const Home = () => {
 
@@ -39,7 +38,8 @@ const Home = () => {
         }
         const userID = user.user_id
         axios.defaults.baseURL = ''
-        const results = await axios.get("http://localhost:5000/home", {
+        const results = await axios.get("http://localhost:5000/home" + "/"
+        + localStorage.getItem("version"), {
             params: {
             userID: userID
             }
@@ -64,7 +64,8 @@ const Home = () => {
         if (e.target.value === "uncaught") {
             results = await axios.get(
                 "http://localhost:5000/uncaught/"
-                + JSON.parse(localStorage.getItem("user")).user_id
+                + JSON.parse(localStorage.getItem("user")).user_id + "/"
+                + localStorage.getItem("version")
                 )
 
                 return setPokemon(results.data)
@@ -73,7 +74,8 @@ const Home = () => {
         if (e.target.value === "caught") {
             results = await axios.get(
                 "http://localhost:5000/caught/"
-                + JSON.parse(localStorage.getItem("user")).user_id
+                + JSON.parse(localStorage.getItem("user")).user_id + "/"
+                + localStorage.getItem("version")
                 )
             
                 return setPokemon(results.data)
@@ -82,7 +84,8 @@ const Home = () => {
         results = await axios.get(
             "http://localhost:5000/type/"
             + e.target.value + "/" 
-            + JSON.parse(localStorage.getItem("user")).user_id
+            + JSON.parse(localStorage.getItem("user")).user_id + "/"
+            + localStorage.getItem("version")
             )
         
         setPokemon(results.data)
@@ -104,7 +107,6 @@ const Home = () => {
     useEffect(() => {
         getPokemon()
         getProfilePic()
-        console.log(pokemon)
     }, []
     )
     
@@ -147,7 +149,10 @@ const Home = () => {
         <>
             <div className="profile">
                 <img src={imageUrl} height="100px" width="100px"/>
-                <Link id="profile" className="profile" to="/profile">Profile</Link>
+                <Link id="profile" 
+                onClick={localStorage.setItem("version", "all")}
+                className="profile" to="/profile">Profile
+                </Link>
             </div>
                 <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>
             <VersionCheck 

@@ -8,7 +8,7 @@ const { getUnCaught,
     getPokemon, updatePokemonUsers, 
     getPokemonByName, getPicUrls,
     getProfilePic, updateProfilePic,
-    getExclusive, 
+    getArea, 
     sortVersion} = require('./helper')
 const dotenv = require('dotenv').config
 const cors = require('cors')
@@ -93,6 +93,9 @@ app.put("/profilePic", async (req, res) => {
     /*  Get current profile picture url from database 
     then delete picture from s3 bucket*/
     getProfilePic(userID, (results) => {
+        if (!results[0].profile_pic) {
+            return
+        }
         const key = results[0].profile_pic.match(/\.com\/(.*)/)[1]
         const params = {Bucket: process.env.BUCKET, Key: key}
         s3.deleteObject(params, (err, data) => {
@@ -116,29 +119,30 @@ app.put("/profilePic", async (req, res) => {
     res.json({Location: Location})
 })
 
-app.get("/version/:version/:userID", (req, res) => {
-    getExclusive(req.params.userID, req.params.version, (results) => {
+app.get("/area/:option/:userID/:version", (req, res) => {
+    getArea(req.params.userID, req.params.option,
+         req.params.version, (results) => {
         returnResults(res, results)
     })
 })
 
 // Route to retrieve all data on all pokemon for user with given id
-app.get('/home', (req, res) => {
-    getPokemon(req.query.userID, (results) => {
+app.get('/home/:version', (req, res) => {
+    getPokemon(req.query.userID, req.params.version, (results) => {
         res.json(results)
     })
 })
 
 // Route to retrieve all data on all caught pokemon for user with given id
-app.get("/uncaught/:id", (req, res) => {
-    getUnCaught(req.params.id, (results) => {
+app.get("/uncaught/:id/:version", (req, res) => {
+    getUnCaught(req.params.id, req.params.version, (results) => {
         returnResults(res, results)
     })
 })
 
 // Route to retrieve all data on all caught pokemon for user with given id
-app.get("/caught/:id", (req, res) => {
-    getCaught(req.params.id, (results) => {
+app.get("/caught/:userID/:version", (req, res) => {
+    getCaught(req.params.userID, req.params.version, (results) => {
         returnResults(res, results)
     })
 })
@@ -151,9 +155,11 @@ app.get('/pokemon/:name/:id', (req, res) => {
 })
 
 // Route to retrieve all data on all pokemon of given type for user with given id
-app.get('/type/:type/:id', (req, res) => {
+app.get('/type/:type/:id/:version', (req, res) => {
     
-    sortPokemonType(req.params.type, req.params.id, (results) => {
+    sortPokemonType(req.params.type, 
+        req.params.id, 
+        req.params.version, (results) => {
       returnResults(res, results)
     })
 })
