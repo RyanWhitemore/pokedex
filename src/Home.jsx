@@ -30,9 +30,15 @@ const Home = () => {
 
     /*----------------------- Begin controller functions ---------------------*/
     
+
+    const setVersion = async () => {
+        const version = await axios.get("http://localhost:5000/version/" +
+        JSON.parse(localStorage.getItem("user")).user_id)
+        localStorage.setItem("version", version.data[0].version)
+    }
+
      // Function to retrieve all pokemon data from database via api
     const getPokemon = async () => {
-        console.log(localStorage.getItem("version"))
         
         if (!user) {
             return navigate('/')
@@ -54,7 +60,7 @@ const Home = () => {
     // Function to sort pokemon by dropdown option
     const handleDropdown = async (e) => {
         e.preventDefault()
-        console.log(localStorage.getItem("version"))
+
 
         let results = ""
 
@@ -107,8 +113,9 @@ const Home = () => {
 
     // On page load retrieve all pokemon from database
     useEffect(() => {
-        getPokemon()
-        getProfilePic()
+        setVersion();
+        getPokemon();
+        getProfilePic();
     }, []
     )
     
@@ -151,9 +158,7 @@ const Home = () => {
         <>
             <div className="profile">
                 <img src={imageUrl} height="100px" width="100px"/>
-                <Link id="profile" 
-                onClick={(e) => {localStorage.setItem("version", "all")}}
-                className="profile" to="/profile">Profile
+                <Link id="profile" className="profile" to="/profile">Profile
                 </Link>
             </div>
                 <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>

@@ -7,7 +7,7 @@ const TableRows = ({handleChange, pokemon}) => {
             try {
                 item.region = item.region.replace(/,.$/, "")
             } catch (error) {
-                console.log(item.region)
+                return
             }
             item = [item.pokemon_id, item.pokemon_name, item.region, item.type, item.is_caught]
             pokemonHtml.push(

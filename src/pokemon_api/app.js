@@ -4,13 +4,11 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const { getUnCaught,
     getCaught, sortPokemonType, 
-    getUserFromDBByUsername, 
-    getPokemon, updatePokemonUsers, 
+    getUserFromDBByUsername, updatePokemonUsers, 
     getPokemonByName, getPicUrls,
     getProfilePic, updateProfilePic,
-    getArea, 
-    sortVersion} = require('./helper')
-const dotenv = require('dotenv').config
+    getArea, updateVersion,
+    sortVersion, getVersion} = require('./helper')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const passport = require("passport")
@@ -128,7 +126,7 @@ app.get("/area/:option/:userID/:version", (req, res) => {
 
 // Route to retrieve all data on all pokemon for user with given id
 app.get('/home/:version', (req, res) => {
-    getPokemon(req.query.userID, req.params.version, (results) => {
+    sortVersion(req.query.userID, req.params.version, (results) => {
         res.json(results)
     })
 })
@@ -189,6 +187,12 @@ app.get('/picUrls/:id', (req, res) => {
     })
 })
 
+app.get('/version/:userID', (req, res) => {
+    getVersion(req.params.userID, (results) => {
+        returnResults(res, results)
+    })
+})
+
 // Route for logging in user using passport
 app.post('/login',  passport.authenticate('local', { failureRedirect: '/'}),
  (req, res) => {
@@ -209,6 +213,11 @@ app.put("/pokemon", (req, res) => {
     updatePokemonUsers(userID, pokemonID, (results) => {
         res.send('success')
     })
+})
+
+app.put("/version/:userID/:version", (req, res) => {
+    updateVersion(req.params.version, req.params.userID)
+    res.status(200).send()
 })
 
 

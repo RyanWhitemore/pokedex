@@ -8,7 +8,6 @@ const LoginForm = ({setUser, user}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [auth, setAuth] = useState('');
-    localStorage.setItem("version", "all")
 
 
     // Function to retrieve user id from api
@@ -43,8 +42,12 @@ const LoginForm = ({setUser, user}) => {
         // if credentials matched save user info to localstorage and redirect to home
         if (loggedIn.authorized) {
             const userID = await getUserID(username)
+            const version = await axios.get(
+                "http://localhost:5000/version/" + userID.data.user_id
+                )
             localStorage.setItem("user", JSON.stringify(userID.data))
             localStorage.setItem("auth", loggedIn)
+            localStorage.setItem("version", version.data[0].version)
             return navigate("/home")
         } else {
             console.log(loggedIn)

@@ -248,6 +248,30 @@ const getProfilePic = (userID, callback) => {
     })
 }
 
+// Query to update version in users table
+const updateVersion = (version, userID) => {
+    con.query(`
+        UPDATE users
+        SET version = ?
+        WHERE user_id = ?
+    `, [version, userID])
+}
+
+// Query to return version from user table with given userID
+const getVersion = (userID, callback) => {
+    con.query(`
+        SELECT version
+        FROM users
+        WHERE user_id = ?
+    `, userID, (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            return callback(results)
+        }
+    })
+}
+
 
 module.exports = {
     getUserFromDB,
@@ -262,5 +286,7 @@ module.exports = {
     updateProfilePic,
     getProfilePic,
     getArea,
-    sortVersion
+    sortVersion,
+    updateVersion,
+    getVersion
 }

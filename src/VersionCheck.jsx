@@ -1,15 +1,29 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
     
     const [checkedViolet, setCheckedViolet] = useState(false)
     const [checkedScarlet, setCheckedScarlet] = useState(false)
-    const [checkedAll, setCheckedAll] = useState(true)
+    const [checkedAll, setCheckedAll] = useState(false)
+
+    const checkBox = () => {
+        const version = localStorage.getItem("version")
+        if (version === "violet") {
+            setCheckedViolet(true)
+        } else if (version === "scarlet") {
+            setCheckedScarlet(true)
+        } else {
+            setCheckedAll(true)
+        }
+    }
 
     
+    useEffect(() => {
+        checkBox()
+    })
+    
     const handleCheck = async (e) => {
-        console.log(localStorage.getItem("version"))
         
         if (e.target.checked) {
             if (e.target.value === "scarlet") {
@@ -30,6 +44,11 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
                 setCheckedScarlet(false)
                 setCheckedViolet(false)
             }
+
+            axios.put("http://localhost:5000/version/" +
+            JSON.parse(localStorage.getItem("user")).user_id + "/" 
+            + localStorage.getItem("version"))
+
             const results = await axios.get("http://localhost:5000/version/sort/" +
                 JSON.parse(localStorage.getItem("user")).user_id + "/" +
                 e.target.value)
