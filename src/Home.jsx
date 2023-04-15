@@ -32,6 +32,7 @@ const Home = () => {
     
      // Function to retrieve all pokemon data from database via api
     const getPokemon = async () => {
+        console.log(localStorage.getItem("version"))
         
         if (!user) {
             return navigate('/')
@@ -53,6 +54,7 @@ const Home = () => {
     // Function to sort pokemon by dropdown option
     const handleDropdown = async (e) => {
         e.preventDefault()
+        console.log(localStorage.getItem("version"))
 
         let results = ""
 
@@ -91,7 +93,7 @@ const Home = () => {
         setPokemon(results.data)
     }
 
-
+    // get profile pic from backend or get default pic
     const getProfilePic = async () => {
         const profilePic = await axios.get(`
             http://localhost:5000/profilePic/` 
@@ -150,7 +152,7 @@ const Home = () => {
             <div className="profile">
                 <img src={imageUrl} height="100px" width="100px"/>
                 <Link id="profile" 
-                onClick={localStorage.setItem("version", "all")}
+                onClick={(e) => {localStorage.setItem("version", "all")}}
                 className="profile" to="/profile">Profile
                 </Link>
             </div>

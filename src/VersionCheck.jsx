@@ -9,6 +9,7 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
 
     
     const handleCheck = async (e) => {
+        console.log(localStorage.getItem("version"))
         
         if (e.target.checked) {
             if (e.target.value === "scarlet") {
@@ -44,16 +45,16 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
             <input type="checkbox"
             checked={checkedScarlet} 
             value="scarlet"
-            onClick={(e) => {e.preventDefault(); 
+            onChange={(e) => {e.preventDefault(); 
                 handleCheck(e)}}/>Scarlet
             <input type="checkbox" 
             checked={checkedViolet}
             value="violet"
-            onClick={(e) => {e.preventDefault(); 
+            onChange={(e) => {e.preventDefault(); 
                 handleCheck(e)}}/>Violet
             <input checked={checkedAll} type="checkbox"
             value="all"
-            onClick={(e) => {e.preventDefault(); 
+            onChange={(e) => {e.preventDefault(); 
                 handleCheck(e)}}/>All
         </div>
     ) 

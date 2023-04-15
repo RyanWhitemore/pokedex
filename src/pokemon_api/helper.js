@@ -109,6 +109,7 @@ const getArea = (userID, option, version, callback) => {
 }
 
 const dropViews = (userID) => {
+
     con.query(`DROP VIEW IF EXISTS ${userID + "scarlet"}`)
     con.query(`DROP VIEW IF EXISTS ${userID + "violet"}`)
     con.query(`DROP VIEW IF EXISTS ${userID + 'all'}`)
@@ -149,7 +150,7 @@ const getPokemon = (userID, version, callback) => {
     dropViews(userID)
 
     con.query(`
-    CREATE VIEW ${userID + "all"} AS
+    CREATE VIEW ${userID + version} AS
     SELECT pokemon_users.is_caught,
         pokemon.pokemon_id,
         pokemon.pokemon_name,
