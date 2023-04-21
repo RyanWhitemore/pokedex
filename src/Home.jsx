@@ -19,6 +19,12 @@ const Home = () => {
        user = false
     }
 
+    const [ areaSelected, setAreaSelected ] = useState('all')
+
+    const [ typeSelected, setTypeSelected ] = useState('all')
+
+    const [ caughtSelected, setCaughtSelected ] = useState('all')
+
     const [ pokemon, setPokemon ] = useState([''])
 
     const [search, setSearch] = useState('')
@@ -45,12 +51,16 @@ const Home = () => {
         }
         const userID = user.user_id
         axios.defaults.baseURL = ''
-        const results = await axios.get("http://localhost:5000/home" + "/"
-        + localStorage.getItem("version"), {
+        const results = await axios.get("http://localhost:5000/sort",  {
             params: {
-            userID: userID
+            userID: userID,
+            area: areaSelected,
+            type: typeSelected,
+            caught: caughtSelected,
+            version: localStorage.getItem('version')
             }
         })
+        console.log(results)
         const pokemon = results.data
         setPokemon(pokemon)
         
@@ -60,13 +70,20 @@ const Home = () => {
     // Function to sort pokemon by dropdown option
     const handleDropdown = async (e) => {
         e.preventDefault()
-
+        console.log(e.target.name)
 
         let results = ""
 
         if (e.target.value === "") {
             return getPokemon()
 
+        }
+
+        if (e.target.name === "type") {
+            setTypeSelected(e.target.value)
+        }
+        if (e.target.name === "caught") {
+            setCaughtSelected(e.target.value)
         }
 
         if (e.target.value === "uncaught") {
@@ -175,7 +192,9 @@ const Home = () => {
                     getPokemon={getPokemon}
                     pokemon={pokemon}
                     setPokemon={setPokemon}
-                    handleDropdown={handleDropdown}/>
+                    handleDropdown={handleDropdown}
+                    setAreaSelected={setAreaSelected}
+                    areaSelected={areaSelected}/>
                     <TableRows pokemon={pokemon} handleChange={handleChange}/>
                 </tbody>
             </table>
