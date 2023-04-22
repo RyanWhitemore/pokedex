@@ -12,50 +12,6 @@ const con = mysql.createConnection({
     password: pass
 });
 
-/* Query that return data on all pokemon that 
-have not been caughtfor user with given id */
-const getUnCaught = (id, version, callback) => {
-    con.query(`
-       SELECT * FROM ${id + version}
-       WHERE is_caught = 0
-        `, id, (error, results) => {
-        if (error) {
-            throw (error)
-        } else {
-            return callback(results)
-        }
-    })
-}
-
-// Query that returns data on all caught pokemon for user with given id
-const getCaught = (userID, version, callback) => {
-    
-        con.query(`
-        SELECT * FROM ${userID + version}
-        WHERE is_caught = 1
-        `, (error, results) => {
-        if (error) {
-            throw (error)
-        } else {
-            return callback(results)
-        }
-    })
-}
-
-// Query that returns data on all pokemon with type value for user with given id
-const sortPokemonType = (type, userID, version, callback) => {
-    con.query(`
-    SELECT * FROM ${userID + version}
-    WHERE type LIKE ${con.escape("%" + type + "%")}
-    `, (error, results) => {
-        if (error) {
-            throw(error)
-        } else {
-            return callback(results)
-        }
-    })
-}
-
 // Query that returns data on one pokemon by name for user with given id
 const getPokemonByName = (pokemonName, userID, callback) => {
     const results = con.query(`
@@ -73,39 +29,6 @@ const getPokemonByName = (pokemonName, userID, callback) => {
             return callback(results)
         }
     })
-}
-
-const getArea = (userID, option, version, callback) => {
-    if (option === "scarlet" || option === "violet") {
-        con.query(`
-        SELECT pu.is_caught,
-            p.pokemon_id,
-            p.pokemon_name,
-            p.region,
-            p.type
-        FROM pokemon_users as pu
-        INNER JOIN pokemon as p ON pu.pokemon_id = p.pokemon_id
-        WHERE pu.user_id = ? AND p.version = ?
-    `, [userID, option], (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            return callback(results)
-        }
-    } )
-    }  else {
-        con.query(`
-        SELECT * FROM ${userID + version}
-        WHERE region LIKE ?
-        `, ["%" + option + "%"], (error, results) => {
-            if (error) {
-                console.log(error)
-            } else {
-                return callback(results)
-            }
-        })
-    }
-
 }
 
 const dropViews = (userID) => {
@@ -279,13 +202,9 @@ module.exports = {
     getPokemon,
     updatePokemonUsers,
     getPokemonByName,
-    sortPokemonType,
-    getCaught,
-    getUnCaught,
     getPicUrls,
     updateProfilePic,
     getProfilePic,
-    getArea,
     sortVersion,
     updateVersion,
     getVersion

@@ -1,4 +1,3 @@
-import axios from 'axios'
 
 const AreaDropdown = (props) => {
 
@@ -10,27 +9,9 @@ const AreaDropdown = (props) => {
     ]
  
 
-    const handleAreaDropdown = async (e) => {
-        if (e.target.value === "") {
-            return props.getPokemon()
-        }
-        try {
-            const results = await axios.get("http://localhost:5000/area/" +
-                e.target.value + '/' +
-                JSON.parse(localStorage.getItem("user")).user_id + "/"
-                + localStorage.getItem("version"))
-            props.setPokemon(results.data)
-            } catch (err) {
-                return
-            }
-        
-
-    }
-
-
     return (
         <div>
-            <select onChange={e => {e.preventDefault(); handleAreaDropdown(e)}} name="area" id="area">
+            <select onChange={e => {e.preventDefault(); props.handleDropdown(e)}} name="area" id="area">
                 <option key="default" value="" defaultValue={""}>Area</option>
                 <option key="all" value="">All</option>
                 <option key="violet" value="violet">Violet Exclusive</option>

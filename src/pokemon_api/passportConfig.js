@@ -15,7 +15,7 @@ const jwtStrategy = new JwtStrategy(
 )
 
 passport.serializeUser((user, done) => {
-    done(null, user.user_id)
+    return done(null, user.user_id)
 })
 
 passport.deserializeUser((id, done) => {

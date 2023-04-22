@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
 
-const LoginForm = ({setUser, user}) => {
+const LoginForm = () => {
     // Initialize variables
     const navigate = useNavigate()
     const [username, setUsername] = useState('');

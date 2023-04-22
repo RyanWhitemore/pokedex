@@ -3,7 +3,8 @@ import CaughtDropdown from "./CaughtDropdown";
 import TypeDropdown from "./TypeDropdown";
 import AreaDropdown from "./AreaDropdown";
 
-const TableContents = ({ getPokemon, pokemon, setPokemon, handleDropdown }) => {
+const TableContents = ({ areaSelected, setAreaSelected, 
+    getPokemon, pokemon, setPokemon, handleDropdown }) => {
 
     return (
         <>
@@ -14,7 +15,10 @@ const TableContents = ({ getPokemon, pokemon, setPokemon, handleDropdown }) => {
                 <th><AreaDropdown
                 getPokemon={getPokemon} 
                 pokemon={pokemon} 
-                setPokemon={setPokemon}/></th>
+                setPokemon={setPokemon}
+                areaSelected={areaSelected}
+                setAreaSelected={setAreaSelected}
+                handleDropdown={handleDropdown}/></th>
                 <th><TypeDropdown handleDropdown={handleDropdown} /></th>
                 <th><CaughtDropdown handleDropdown={handleDropdown}/></th>
             </tr>

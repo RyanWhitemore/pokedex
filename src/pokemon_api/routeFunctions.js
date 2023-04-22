@@ -1,6 +1,7 @@
 const mysql = require('mysql2')
 const dotenv = require('dotenv').config()
 const bcrypt = require('bcrypt')
+const dropViews = require('./helper.js')
 
 const user = process.env.USER
 const pass = process.env.PASSWORD
@@ -48,9 +49,9 @@ const registerUser = async (req, res) => {
 const returnResults = (res, results) => {
     try {
         if (!results) {
-            res.send({})
+            return res.send({})
         } else {
-            res.json(results)
+            return res.json(results)
         }
     }
     catch (err) {
@@ -58,10 +59,77 @@ const returnResults = (res, results) => {
     }
 }
 
+const sort = (req, res, next) => {
+
+    
+        const {area, type, caught, userID, version} = req.query
+
+        con.query(`
+            CREATE OR REPLACE VIEW ${userID + version} AS
+            SELECT pokemon_users.is_caught,
+                pokemon.pokemon_id,
+                pokemon.pokemon_name,
+                pokemon.region,
+                pokemon.type 
+            FROM pokemon_users
+            INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
+            where user_id = ${con.escape(userID)}
+        `)
+        
+
+        if ((area === "all") && (type === 'all') && (caught === 'all')) {
+            let query = `
+                SELECT *
+                FROM ${userID + version}
+            `
+            con.query(query, (err, results) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    returnResults(res, results)
+                }
+            })
+        
+        } else {
+        let query = `
+            SELECT * 
+            FROM ${userID + version}
+            WHERE 1=1
+        `
+
+        if (area != 'all') {
+            query = query + `
+                AND region LIKE ${con.escape("%" + area + "%")}
+            `
+        }
+        if (type != 'all') {
+            query = query + `
+                AND type LIKE ${con.escape("%" + type + "%")}
+            `
+        }
+        if (caught != 'all') {
+            query = query + `
+                AND is_caught = ${con.escape(caught)}
+            `
+        }
+
+
+        con.query(query, (err, results) => {
+            if (err) {
+                console.log("whoops")
+            } else {
+                returnResults(res, results)
+            }
+        })
+    }
+    
+}
+
 
 module.exports = {
     registerUser,
-    returnResults
+    returnResults,
+    sort
 }
 
 

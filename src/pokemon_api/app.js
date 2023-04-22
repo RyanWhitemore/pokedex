@@ -1,13 +1,11 @@
 const express = require('express');
-const { registerUser, returnResults } = require('./routeFunctions')
+const { registerUser, returnResults, sort } = require('./routeFunctions')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const { getUnCaught,
-    getCaught, sortPokemonType, 
-    getUserFromDBByUsername, updatePokemonUsers, 
+const { getUserFromDBByUsername, updatePokemonUsers, 
     getPokemonByName, getPicUrls,
     getProfilePic, updateProfilePic,
-    getArea, updateVersion,
+    updateVersion,
     sortVersion, getVersion} = require('./helper')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
@@ -50,6 +48,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false
 }));
+
 /*---------------------------- End express config -----------------------------*/
 
 /*----------------Begin passport initialization and config--------------------*/
@@ -62,6 +61,8 @@ const jwtRequired = passport.authenticate('jwt', {session: false})
 
 /*------------------End passport initialization and config----------------------*/
 
+
+app.get('/sort', sort)
 
 // Route to get user information from database by given username
 app.get('/user/:username', (req, res) => {
@@ -117,34 +118,6 @@ app.put("/profilePic", async (req, res) => {
     res.json({Location: Location})
 })
 
-app.get("/area/:option/:userID/:version", (req, res) => {
-    getArea(req.params.userID, req.params.option,
-         req.params.version, (results) => {
-        returnResults(res, results)
-    })
-})
-
-// Route to retrieve all data on all pokemon for user with given id
-app.get('/home/:version', (req, res) => {
-    sortVersion(req.query.userID, req.params.version, (results) => {
-        res.json(results)
-    })
-})
-
-// Route to retrieve all data on all caught pokemon for user with given id
-app.get("/uncaught/:id/:version", (req, res) => {
-    getUnCaught(req.params.id, req.params.version, (results) => {
-        returnResults(res, results)
-    })
-})
-
-// Route to retrieve all data on all caught pokemon for user with given id
-app.get("/caught/:userID/:version", (req, res) => {
-    getCaught(req.params.userID, req.params.version, (results) => {
-        returnResults(res, results)
-    })
-})
-
 // Route to retrieve all data on one pokemon by name for user with given id
 app.get('/pokemon/:name/:id', (req, res) => {
     getPokemonByName(req.params.name, req.params.id, results => {
@@ -152,18 +125,8 @@ app.get('/pokemon/:name/:id', (req, res) => {
     })
 })
 
-// Route to retrieve all data on all pokemon of given type for user with given id
-app.get('/type/:type/:id/:version', (req, res) => {
-    
-    sortPokemonType(req.params.type, 
-        req.params.id, 
-        req.params.version, (results) => {
-      returnResults(res, results)
-    })
-})
-
+// Route to create a view with only pokemon from saved version
 app.get('/version/sort/:userID/:version', (req, res) => {
-
     sortVersion(req.params.userID, req.params.version, (results) => {
         returnResults(res, results)
     })
@@ -187,6 +150,7 @@ app.get('/picUrls/:id', (req, res) => {
     })
 })
 
+// Route to retrieve the version for user with given id
 app.get('/version/:userID', (req, res) => {
     getVersion(req.params.userID, (results) => {
         returnResults(res, results)
@@ -215,6 +179,7 @@ app.put("/pokemon", (req, res) => {
     })
 })
 
+// Route to add version to database for under user with given id
 app.put("/version/:userID/:version", (req, res) => {
     updateVersion(req.params.version, req.params.userID)
     res.status(200).send()

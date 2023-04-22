@@ -60,7 +60,6 @@ const Home = () => {
             version: localStorage.getItem('version')
             }
         })
-        console.log(results)
         const pokemon = results.data
         setPokemon(pokemon)
         
@@ -70,50 +69,18 @@ const Home = () => {
     // Function to sort pokemon by dropdown option
     const handleDropdown = async (e) => {
         e.preventDefault()
-        console.log(e.target.name)
-
-        let results = ""
-
-        if (e.target.value === "") {
-            return getPokemon()
-
-        }
-
-        if (e.target.name === "type") {
+        
+        if (e.target.name === 'type') {
             setTypeSelected(e.target.value)
         }
         if (e.target.name === "caught") {
             setCaughtSelected(e.target.value)
         }
-
-        if (e.target.value === "uncaught") {
-            results = await axios.get(
-                "http://localhost:5000/uncaught/"
-                + JSON.parse(localStorage.getItem("user")).user_id + "/"
-                + localStorage.getItem("version")
-                )
-
-                return setPokemon(results.data)
+        if (e.target.name === "area") {
+            setAreaSelected(e.target.value)
         }
-
-        if (e.target.value === "caught") {
-            results = await axios.get(
-                "http://localhost:5000/caught/"
-                + JSON.parse(localStorage.getItem("user")).user_id + "/"
-                + localStorage.getItem("version")
-                )
-            
-                return setPokemon(results.data)
-        }
-
-        results = await axios.get(
-            "http://localhost:5000/type/"
-            + e.target.value + "/" 
-            + JSON.parse(localStorage.getItem("user")).user_id + "/"
-            + localStorage.getItem("version")
-            )
         
-        setPokemon(results.data)
+        
     }
 
     // get profile pic from backend or get default pic
@@ -136,6 +103,24 @@ const Home = () => {
     }, []
     )
     
+    useEffect(() => {
+        async function sort() {
+            console.log('sort called')
+            const userID = user.user_id
+            const results = await axios.get("http://localhost:5000/sort", {
+                params: {
+                    userID: userID,
+                    area: areaSelected,
+                    type: typeSelected,
+                    caught: caughtSelected,
+                    version: localStorage.getItem("version")
+                }
+            }) 
+
+            setPokemon(results.data)
+    }
+    sort()
+    }, [typeSelected, areaSelected, caughtSelected])
 
     // function to log user out
     const logout = (e) => {
@@ -178,7 +163,12 @@ const Home = () => {
                 <Link id="profile" className="profile" to="/profile">Profile
                 </Link>
             </div>
-                <h1 onClick={(e) => getPokemon()} id="header">Pokedex</h1>
+                <h1 onClick={(e) => {
+                    setAreaSelected('all')
+                    setTypeSelected('all')
+                    setCaughtSelected('all')
+                        }
+                    } id="header">Pokedex</h1>
             <VersionCheck 
                 getPokemon={getPokemon}
                 setPokemon={setPokemon}
