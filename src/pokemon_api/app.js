@@ -55,9 +55,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors(corsConfig))
-app.use(cookieParser())
 
-const jwtRequired = passport.authenticate('jwt', {session: false})
+const jwtRequired = passport.authenticate('jwt', {session: true})
 
 /*------------------End passport initialization and config----------------------*/
 
@@ -164,7 +163,8 @@ app.post('/login',  passport.authenticate('local', { failureRedirect: '/'}),
     req.session.jwt = jwt.sign(userReturnObject,
         process.env.JWT_SECRET_KEY);
     const jwtToken = req.session.jwt
-   return res.send({authorized: true})
+   res.send({authorized: true})
+   return;
 })
 
 // Route used to save new user info into database
@@ -172,8 +172,8 @@ app.post('/register', registerUser)
 
 // Route to update caught status of pokemon with given id for user with given id
 app.put("/pokemon", (req, res) => {
-    userID = req.body.userID
-    pokemonID = req.body.pokemonID
+    const userID = req.body.userID
+    const pokemonID = req.body.pokemonID
     updatePokemonUsers(userID, pokemonID, (results) => {
         res.send('success')
     })

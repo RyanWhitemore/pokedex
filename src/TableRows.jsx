@@ -4,11 +4,6 @@ const TableRows = ({handleChange, pokemon}) => {
     const pokemonHtml = []
     try {
         pokemon.forEach((item) => {
-            try {
-                item.region = item.region.replace(/,.$/, "")
-            } catch (error) {
-                return
-            }
             item = [item.pokemon_id, item.pokemon_name, item.region, item.type, item.is_caught]
             pokemonHtml.push(
                 <tr value={item[0]} key={item[0] + 1}>

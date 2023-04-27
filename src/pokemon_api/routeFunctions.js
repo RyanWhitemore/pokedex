@@ -1,7 +1,6 @@
 const mysql = require('mysql2')
 const dotenv = require('dotenv').config()
 const bcrypt = require('bcrypt')
-const dropViews = require('./helper.js')
 
 const user = process.env.USER
 const pass = process.env.PASSWORD
@@ -97,17 +96,17 @@ const sort = (req, res, next) => {
             WHERE 1=1
         `
 
-        if (area != 'all') {
+        if (area !== 'all') {
             query = query + `
                 AND region LIKE ${con.escape("%" + area + "%")}
             `
         }
-        if (type != 'all') {
+        if (type !== 'all') {
             query = query + `
                 AND type LIKE ${con.escape("%" + type + "%")}
             `
         }
-        if (caught != 'all') {
+        if (caught !== 'all') {
             query = query + `
                 AND is_caught = ${con.escape(caught)}
             `

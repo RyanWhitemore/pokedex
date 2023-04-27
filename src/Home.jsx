@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import TableContents from './TableContents'
 import TableRows from './TableRows'
@@ -43,28 +43,6 @@ const Home = () => {
         localStorage.setItem("version", version.data[0].version)
     }
 
-     // Function to retrieve all pokemon data from database via api
-    const getPokemon = async () => {
-        
-        if (!user) {
-            return navigate('/')
-        }
-        const userID = user.user_id
-        axios.defaults.baseURL = ''
-        const results = await axios.get("http://localhost:5000/sort",  {
-            params: {
-            userID: userID,
-            area: areaSelected,
-            type: typeSelected,
-            caught: caughtSelected,
-            version: localStorage.getItem('version')
-            }
-        })
-        const pokemon = results.data
-        setPokemon(pokemon)
-        
-       
-    }
 
     // Function to sort pokemon by dropdown option
     const handleDropdown = async (e) => {
@@ -83,29 +61,53 @@ const Home = () => {
         
     }
 
-    // get profile pic from backend or get default pic
-    const getProfilePic = async () => {
-        const profilePic = await axios.get(`
-            http://localhost:5000/profilePic/` 
-            + user.user_id)
-        if (!profilePic.data[0].profile_pic) {
-            return setImageUrl("./profileDefault.png")
-        } else {
-            setImageUrl(profilePic.data[0].profile_pic)
+
+    // Function to retrieve all pokemon data from database via api
+    const getPokemon = useCallback(async () => {
+        
+        if (!user) {
+            return navigate('/')
         }
-    }
+        const userID = user.user_id
+        axios.defaults.baseURL = ''
+        const results = await axios.get("http://localhost:5000/sort",  {
+            params: {
+            userID: userID,
+            area: areaSelected,
+            type: typeSelected,
+            caught: caughtSelected,
+            version: localStorage.getItem('version')
+            }
+        })
+        const pokemon = results.data
+        setPokemon(pokemon)
+    
+   
+    }, [areaSelected, typeSelected, caughtSelected, navigate, user])
+
 
     // On page load retrieve all pokemon from database
     useEffect(() => {
+        // get profile pic from backend or get default pic
+        const getProfilePic = async () => {
+            const profilePic = await axios.get(`
+                http://localhost:5000/profilePic/` 
+                + user.user_id)
+            if (!profilePic.data[0].profile_pic) {
+                return setImageUrl("./profileDefault.png")
+            } else {
+                setImageUrl(profilePic.data[0].profile_pic)
+            }
+        }
+
         setVersion();
         getPokemon();
         getProfilePic();
-    }, []
+    }, [user.user_id]
     )
     
     useEffect(() => {
         async function sort() {
-            console.log('sort called')
             const userID = user.user_id
             const results = await axios.get("http://localhost:5000/sort", {
                 params: {
@@ -120,7 +122,7 @@ const Home = () => {
             setPokemon(results.data)
     }
     sort()
-    }, [typeSelected, areaSelected, caughtSelected])
+    }, [user.user_id, typeSelected, areaSelected, caughtSelected])
 
     // function to log user out
     const logout = (e) => {
@@ -159,7 +161,7 @@ const Home = () => {
     return (
         <>
             <div className="profile">
-                <img src={imageUrl} height="100px" width="100px"/>
+                <img alt="" src={imageUrl} height="100px" width="100px"/>
                 <Link id="profile" className="profile" to="/profile">Profile
                 </Link>
             </div>
@@ -167,6 +169,7 @@ const Home = () => {
                     setAreaSelected('all')
                     setTypeSelected('all')
                     setCaughtSelected('all')
+                    getPokemon()
                         }
                     } id="header">Pokedex</h1>
             <VersionCheck 

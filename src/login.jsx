@@ -41,6 +41,7 @@ const LoginForm = () => {
 
         // if credentials matched save user info to localstorage and redirect to home
         if (loggedIn.authorized) {
+            console.log(loggedIn)
             const userID = await getUserID(username)
             const version = await axios.get(
                 "http://localhost:5000/version/" + userID.data.user_id

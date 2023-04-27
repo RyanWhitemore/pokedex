@@ -19,7 +19,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser((id, done) => {
-    user = getUserFromDB(id, async (user) => {
+    getUserFromDB(id, async (user) => {
         if (!user) {
             return done(null, false);
         }
@@ -28,7 +28,7 @@ passport.deserializeUser((id, done) => {
     
 })
 
-passport.use(new LocalStrategy( async (username, password, done) => {
+passport.use(new LocalStrategy( async (username, password, done,) => {
     getUserFromDBByUsername(username, async (user) => {
         user = user[0]
         try {

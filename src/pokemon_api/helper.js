@@ -14,7 +14,7 @@ const con = mysql.createConnection({
 
 // Query that returns data on one pokemon by name for user with given id
 const getPokemonByName = (pokemonName, userID, callback) => {
-    const results = con.query(`
+    con.query(`
     SELECT pokemon_users.is_caught,
         pokemon.pokemon_id,
         pokemon.pokemon_name,
@@ -119,13 +119,12 @@ const updatePokemonUsers = (userID, pokemonID, callback) => {
 
 // Query that returns all data on user with given id
 const getUserFromDB = (id, callback) => {
-    const results = con.query('SELECT * FROM users WHERE user_id = ?', [id], (error, results) => {
+    con.query('SELECT * FROM users WHERE user_id = ?', [id], (error, results) => {
         if (error) {
             throw (error)
         }
         return callback(results)
     });
-    return callback(results)
 };
 
 // Query that returns all data on user with given username
@@ -159,7 +158,7 @@ const updateProfilePic = (userID, url) => {
 
 // Query to get profile picture url from database
 const getProfilePic = (userID, callback) => {
-    const results = con.query(`
+    con.query(`
         SELECT profile_pic
         FROM users
         WHERE user_id = ?
