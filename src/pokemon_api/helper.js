@@ -32,13 +32,15 @@ const getPokemonByName = (pokemonName, userID, callback) => {
 } 
     
 
-const dropViews = (userID) => {
+const dropViews = (userID, callback) => {
     getConnection((err, con) => {
         con.query(`DROP VIEW IF EXISTS ${userID + "scarlet"}`)
         con.query(`DROP VIEW IF EXISTS ${userID + "violet"}`)
         con.query(`DROP VIEW IF EXISTS ${userID + 'all'}`)
         
         con.release()
+
+	callback()
     })
 }
 
@@ -46,9 +48,8 @@ const sortVersion = (userID, version, callback) => {
     if (version === "all") {
         return getPokemon(userID, version, callback)
     }
-    dropViews(userID)
 
-    getConnection((err, con) => {
+    const createView = () => { getConnection((err, con) => {
         con.query(`
             CREATE VIEW ${userID + version}
             AS
@@ -71,16 +72,16 @@ const sortVersion = (userID, version, callback) => {
             }
         })
         con.release()
-    })
+    })}
+
+    dropViews(userID, createView)
     
 }
 
 // Query that returns data on all pokemon for user with given id
 const getPokemon = (userID, version, callback) => {
-    
-    dropViews(userID)
 
-    getConnection((err, con) => {
+    const createView = () => {getConnection((err, con) => {
         con.query(`
             CREATE VIEW ${userID + version} AS
             SELECT pokemon_users.is_caught,
@@ -105,7 +106,9 @@ const getPokemon = (userID, version, callback) => {
             })
 
             con.release()
-    })
+    })}
+
+    dropViews(userID, createView)
 }
 
     

@@ -1,13 +1,14 @@
 const mysql = require('mysql2')
 
-const user = process.env.USER
+const user = process.env.DBUSER
 const password = process.env.PASSWORD
+const database = process.env.DATABASE
 
 const pool = mysql.createPool({
     host: 'localhost',
     user: user,
     password: password,
-    database: 'pokemon_prototype_db'
+    database: database
 })
 
 const getConnection = (callBack) => {

@@ -8,7 +8,7 @@ import VersionCheck from './VersionCheck'
 
 const Home = () => {
 
-    const path = "http://localhost:5000"
+    const path = "https://pokedex-project.com/api"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
@@ -40,7 +40,7 @@ const Home = () => {
     
 
     const setVersion = async () => {
-        const version = await axios.get(path +
+        const version = await axios.get(path + "/version/" +
         JSON.parse(localStorage.getItem("user")).user_id)
         localStorage.setItem("version", version.data[0].version)
     }

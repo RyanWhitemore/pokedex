@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
     
-    const path = "http://localhost:5000"
+    const path = "https://pokedex-project.com/api"
     const [checkedViolet, setCheckedViolet] = useState(false)
     const [checkedScarlet, setCheckedScarlet] = useState(false)
     const [checkedAll, setCheckedAll] = useState(false)

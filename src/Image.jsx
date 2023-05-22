@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 const Image = (props) => {
 
-        const path = "http://localhost:5000" 
+        const path = "https://pokedex-project.com/api" 
 
         const [image, setImage] = useState([])
         const [loading, setLoading] = useState(true)
