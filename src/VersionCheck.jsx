@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
     
+    const path = "http://localhost:5000"
     const [checkedViolet, setCheckedViolet] = useState(false)
     const [checkedScarlet, setCheckedScarlet] = useState(false)
     const [checkedAll, setCheckedAll] = useState(false)
@@ -45,11 +46,11 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
                 setCheckedViolet(false)
             }
 
-            axios.put("http://localhost:5000/version/" +
+            axios.put(path + "/version/" +
             JSON.parse(localStorage.getItem("user")).user_id + "/" 
             + localStorage.getItem("version"))
 
-            const results = await axios.get("http://localhost:5000/version/sort/" +
+            const results = await axios.get(path + "/version/sort/" +
                 JSON.parse(localStorage.getItem("user")).user_id + "/" +
                 e.target.value)
             setPokemon(results.data)

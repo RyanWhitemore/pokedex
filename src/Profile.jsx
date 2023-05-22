@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom"
 
 const Profile = () => {
     const navigate = useNavigate()
+    const path = "http://localhost:5000"
 
     const user = JSON.parse(localStorage.getItem("user"))
     const [ file, setFile ] = useState(null);
@@ -33,7 +34,7 @@ const Profile = () => {
         if (!file) {
             return;
         }
-        const { Location } = await axios.put("http://localhost:5000/profilePic", {
+        const { Location } = await axios.put(path + "/profilePic", {
             userID: user.user_id,
             file: file
         }, {
@@ -48,8 +49,8 @@ const Profile = () => {
     }
 
     const getProfilePic = async () => {
-        const profilePic = await axios.get(`
-            http://localhost:5000/profilePic/` 
+        const profilePic = await axios.get(
+            path + `/profilePic/`
             + user.user_id)
         if (!profilePic.data[0].profile_pic) {
             return setImageUrl("./profileDefault.png")

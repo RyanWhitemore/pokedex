@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const LoginForm = () => {
     // Initialize variables
+    const path = "http://localhost:5000"
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +13,7 @@ const LoginForm = () => {
 
     // Function to retrieve user id from api
     const getUserID = async (username) => {
-        const userID = await axios.get("http://localhost:5000/user/" + username)
+        const userID = await axios.get(path + "/user/" + username)
         return userID
     }
 
@@ -29,7 +30,7 @@ const LoginForm = () => {
         and {authorized: false} if they dont */
         axios.defaults.baseURL = ''
         axios.defaults.withCredentials = true
-        const loggedIn = await axios.post("http://localhost:5000/login", body, {
+        const loggedIn = await axios.post(path + "/login", body, {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
@@ -44,7 +45,7 @@ const LoginForm = () => {
             console.log(loggedIn)
             const userID = await getUserID(username)
             const version = await axios.get(
-                "http://localhost:5000/version/" + userID.data.user_id
+                path + "/version/" + userID.data.user_id
                 )
             localStorage.setItem("user", JSON.stringify(userID.data))
             localStorage.setItem("auth", loggedIn)

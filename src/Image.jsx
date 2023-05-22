@@ -2,11 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from 'react'
 
 const Image = (props) => {
+
+        const path = "http://localhost:5000" 
+
         const [image, setImage] = useState([])
         const [loading, setLoading] = useState(true)
 
         const getImage = async () => {
-            const result = await axios.get("http://localhost:5000/picUrls/" + props.id)
+            const result = await axios.get(path + "/picUrls/" + props.id)
             for (const url of result.data) {
                 setImage(oldArray => [...oldArray, url.image])
                 

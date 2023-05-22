@@ -8,6 +8,8 @@ import VersionCheck from './VersionCheck'
 
 const Home = () => {
 
+    const path = "http://localhost:5000"
+
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
     
@@ -38,7 +40,7 @@ const Home = () => {
     
 
     const setVersion = async () => {
-        const version = await axios.get("http://localhost:5000/version/" +
+        const version = await axios.get(path +
         JSON.parse(localStorage.getItem("user")).user_id)
         localStorage.setItem("version", version.data[0].version)
     }
@@ -70,7 +72,7 @@ const Home = () => {
         }
         const userID = user.user_id
         axios.defaults.baseURL = ''
-        const results = await axios.get("http://localhost:5000/sort",  {
+        const results = await axios.get(path + "/sort",  {
             params: {
             userID: userID,
             area: areaSelected,
@@ -90,11 +92,11 @@ const Home = () => {
     useEffect(() => {
         // get profile pic from backend or get default pic
         const getProfilePic = async () => {
-            const profilePic = await axios.get(`
-                http://localhost:5000/profilePic/` 
+            const profilePic = await axios.get(
+                path + `/profilePic/` 
                 + user.user_id)
             if (!profilePic.data[0].profile_pic) {
-                return setImageUrl("./profileDefault.png")
+                return setImageUrl("https://pokedexpictures.s3.us-east-2.amazonaws.com/defaults/profileDefault.png")
             } else {
                 setImageUrl(profilePic.data[0].profile_pic)
             }
@@ -109,7 +111,7 @@ const Home = () => {
     useEffect(() => {
         async function sort() {
             const userID = user.user_id
-            const results = await axios.get("http://localhost:5000/sort", {
+            const results = await axios.get(path +"/sort", {
                 params: {
                     userID: userID,
                     area: areaSelected,
@@ -137,7 +139,7 @@ const Home = () => {
         e.preventDefault()
         const userID = JSON.parse(localStorage.getItem("user")).user_id
         axios.defaults.baseURL = ""
-        const results = await axios.get("http://localhost:5000/pokemon/" + search + '/' + userID)
+        const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
         setPokemon(results.data)
 
     }
@@ -145,7 +147,7 @@ const Home = () => {
     // Function to change the caught status of pokemon when box checked
     const handleChange = async (pokemon_id) => {
         axios.defaults.withCredentials = false
-        axios.put("http://localhost:5000/pokemon", {
+        axios.put(path + "/pokemon", {
             userID: user.user_id,
             pokemonID: pokemon_id
         }, {

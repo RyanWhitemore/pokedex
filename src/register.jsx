@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Register = () => {
     const navigate = useNavigate();
+    const path = "http://localhost:5000"
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,7 +19,7 @@ const Register = () => {
         }
 
         axios.defaults.baseURL = ''
-        await axios.post("http://localhost:5000/register", body, {
+        await axios.post(path + "/register", body, {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
@@ -33,13 +34,14 @@ const Register = () => {
 
     return (
         <>
-            <div>
+            <h1 id="register-header">Register</h1>
+            <div id="register">
                 <form onSubmit={registerUser}>
                     <input value={username} onChange={(e) => setUsername(e.target.value)} type='text'></input><br/>
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type='text'></input><br/>
                     <button type="submit">Register</button><br/>
                 </form>
-                <Link to="/login">Login</Link>
+                <Link to="/">Login</Link>
             </div>
         </>
     )

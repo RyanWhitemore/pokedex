@@ -7,7 +7,7 @@ const Search = ({ submitSearch, setSearch }) => {
         placeholder='search'/>
         <input id="search-image" 
         type="image" 
-        src="test.png" 
+        src="https://pokedexpictures.s3.us-east-2.amazonaws.com/defaults/test.png" 
         alt='detective picachu' 
         width="30px" 
         height="30px"/>

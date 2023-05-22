@@ -1,4 +1,6 @@
 table {
+    display: flex;
+    flex-wrap: wrap;
     width: 66%;
     text-align: center;
     margin-left: auto;
@@ -56,4 +58,20 @@ div.version-checks {
     top: 10%;
     left: 43%;
     position: fixed;
+}
+
+#register {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#register-header {
+    position: relative;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
