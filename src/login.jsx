@@ -8,15 +8,14 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [auth, setAuth] = useState('');
 
 
     // Function to retrieve user id from api
-    const getUserID = async (username) => {
-        const userID = await axios.get(path + "/user/" + username)
-        return userID
-    }
-
+        const getUserID = async (username) => {
+            const userID = await axios.get(path + "/user/" + username)
+            return userID
+        }
+    
     // Function to log in user
      const loginUser = async (e) => {
         e.preventDefault();
@@ -42,14 +41,17 @@ const LoginForm = () => {
 
         // if credentials matched save user info to localstorage and redirect to home
         if (loggedIn.authorized) {
-            console.log(loggedIn)
-            const userID = await getUserID(username)
-            const version = await axios.get(
-                path + "/version/" + userID.data.user_id
-                )
-            localStorage.setItem("user", JSON.stringify(userID.data))
-            localStorage.setItem("auth", loggedIn)
-            localStorage.setItem("version", version.data[0].version)
+            try {
+                const userID = await getUserID(username)
+                const version = await axios.get(
+                    path + "/version/" + userID.data.user_id
+                    )
+                localStorage.setItem("user", JSON.stringify(userID.data))
+                localStorage.setItem("auth", loggedIn)
+                localStorage.setItem("version", version.data[0].version)
+            } catch (err) {
+                throw (err)
+            }
             return navigate("/home")
         } else {
             console.log(loggedIn)
