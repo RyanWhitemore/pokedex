@@ -40,9 +40,13 @@ const Home = () => {
     
 
     const setVersion = async () => {
-        const version = await axios.get(path + "/version/" +
-        JSON.parse(localStorage.getItem("user")).user_id)
-        localStorage.setItem("version", version.data[0].version)
+        try {
+            const version = await axios.get(path + "/version/" +
+            JSON.parse(localStorage.getItem("user")).user_id)
+            localStorage.setItem("version", version.data[0].version)
+        } catch (err) {
+            throw (err)
+        }
     }
 
 
@@ -50,16 +54,19 @@ const Home = () => {
     const handleDropdown = async (e) => {
         e.preventDefault()
         
-        if (e.target.name === 'type') {
-            setTypeSelected(e.target.value)
+        try {
+            if (e.target.name === 'type') {
+                setTypeSelected(e.target.value)
+            }
+            if (e.target.name === "caught") {
+                setCaughtSelected(e.target.value)
+            }
+            if (e.target.name === "area") {
+                setAreaSelected(e.target.value)
+            }
+        } catch (err) {
+            throw (err)
         }
-        if (e.target.name === "caught") {
-            setCaughtSelected(e.target.value)
-        }
-        if (e.target.name === "area") {
-            setAreaSelected(e.target.value)
-        }
-        
         
     }
 
@@ -72,18 +79,22 @@ const Home = () => {
         }
         const userID = user.user_id
         axios.defaults.baseURL = ''
-        const results = await axios.get(path + "/sort",  {
-            params: {
-            userID: userID,
-            area: areaSelected,
-            type: typeSelected,
-            caught: caughtSelected,
-            version: localStorage.getItem('version')
-            }
-        })
-        const pokemon = results.data
-        setPokemon(pokemon)
-    
+        try {
+            const results = await axios.get(path + "/sort",  {
+                params: {
+                userID: userID,
+                area: areaSelected,
+                type: typeSelected,
+                caught: caughtSelected,
+                version: localStorage.getItem('version')
+                }
+            })
+
+            const pokemon = results.data
+            setPokemon(pokemon)
+        } catch (err) {
+            throw (err)
+        }
    
     }, [areaSelected, typeSelected, caughtSelected, navigate, user])
 
@@ -92,6 +103,7 @@ const Home = () => {
     useEffect(() => {
         // get profile pic from backend or get default pic
         const getProfilePic = async () => {
+            try {
             const profilePic = await axios.get(
                 path + `/profilePic/` 
                 + user.user_id)
@@ -100,28 +112,37 @@ const Home = () => {
             } else {
                 setImageUrl(profilePic.data[0].profile_pic)
             }
-        }
-
+        
+    
         setVersion();
         getPokemon();
         getProfilePic();
+        } catch (err) {
+            throw (err)
+        }    
+    }
+
     }, [user.user_id]
     )
     
     useEffect(() => {
         async function sort() {
-            const userID = user.user_id
-            const results = await axios.get(path +"/sort", {
-                params: {
-                    userID: userID,
-                    area: areaSelected,
-                    type: typeSelected,
-                    caught: caughtSelected,
-                    version: localStorage.getItem("version")
-                }
-            }) 
-
-            setPokemon(results.data)
+            try {
+                const userID = user.user_id
+                const results = await axios.get(path +"/sort", {
+                    params: {
+                        userID: userID,
+                        area: areaSelected,
+                        type: typeSelected,
+                        caught: caughtSelected,
+                        version: localStorage.getItem("version")
+                    }
+                }) 
+            
+                setPokemon(results.data)
+            } catch (err) {
+                throw (err)
+            }
     }
     sort()
     }, [user.user_id, typeSelected, areaSelected, caughtSelected])
@@ -136,26 +157,34 @@ const Home = () => {
 
     // Function to handle search submit form
     const submitSearch = async (e) => {
-        e.preventDefault()
-        const userID = JSON.parse(localStorage.getItem("user")).user_id
-        axios.defaults.baseURL = ""
-        const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
-        setPokemon(results.data)
-
+        try {
+            e.preventDefault()
+            const userID = JSON.parse(localStorage.getItem("user")).user_id
+            axios.defaults.baseURL = ""
+            const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
+            setPokemon(results.data)
+            
+        } catch (err) {
+            throw (err)
+        }
     }
 
     // Function to change the caught status of pokemon when box checked
     const handleChange = async (pokemon_id) => {
-        axios.defaults.withCredentials = false
-        axios.put(path + "/pokemon", {
-            userID: user.user_id,
-            pokemonID: pokemon_id
-        }, {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Credentials": true
-            }
-        })
+        try {
+            axios.defaults.withCredentials = false
+            axios.put(path + "/pokemon", {
+                userID: user.user_id,
+                pokemonID: pokemon_id
+            }, {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Credentials": true
+                }
+            })
+        } catch (err) {
+            throw (err)
+        }
     }
     /*-------------------------- End controller functions --------------------*/
 
