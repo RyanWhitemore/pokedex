@@ -104,23 +104,26 @@ const Home = () => {
         // get profile pic from backend or get default pic
         const getProfilePic = async () => {
             try {
-            const profilePic = await axios.get(
-                path + `/profilePic/` 
-                + user.user_id)
-            if (!profilePic.data[0].profile_pic) {
-                return setImageUrl("https://pokedexpictures.s3.us-east-2.amazonaws.com/defaults/profileDefault.png")
-            } else {
-                setImageUrl(profilePic.data[0].profile_pic)
+                console.log("called")
+                const profilePic = await axios.get(
+                    path + `/profilePic/` 
+                    + user.user_id)
+                if (!profilePic.data[0].profile_pic) {
+                    return setImageUrl("https://pokedexpictures.s3.us-east-2.amazonaws.com/defaults/profileDefault.png")
+                } else {
+                    setImageUrl(profilePic.data[0].profile_pic)
+                }
+            } catch (err) {
+                console.log("there was an error")
+                console.log(err)
             }
         
-        } catch (err) {
-            console.log(err)
+    
         }
+
         setVersion();
         getPokemon();
         getProfilePic();
-    
-    }
 
     }, [user.user_id]
     )
