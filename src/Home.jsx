@@ -113,13 +113,13 @@ const Home = () => {
                 setImageUrl(profilePic.data[0].profile_pic)
             }
         
-    
+        } catch (err) {
+            console.log(err)
+        }
         setVersion();
         getPokemon();
         getProfilePic();
-        } catch (err) {
-            throw (err)
-        }    
+    
     }
 
     }, [user.user_id]
