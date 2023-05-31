@@ -56,7 +56,11 @@ const returnResults = (res, results) => {
     }
     catch (err) {
         res.sendStatus(500)
+<<<<<<< HEAD
         throw (err);
+=======
+        throw (err)
+>>>>>>> 0e3efe6d25aa5bf3d0cdf32036e1fd4f55982102
     }
 }
 
