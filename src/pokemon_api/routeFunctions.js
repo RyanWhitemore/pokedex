@@ -55,6 +55,7 @@ const returnResults = (res, results) => {
         }
     }
     catch (err) {
+        res.sendStatus(500)
         throw (err)
     }
 }
