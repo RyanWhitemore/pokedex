@@ -1,9 +1,4 @@
-const mysql = require('mysql2');
 const getConnection = require('./pool.js');
-
-// Initialize environment variables
-const user = process.env.USER;
-const pass = process.env.PASSWORD
 
 
 // Query that returns data on one pokemon by name for user with given id
@@ -23,11 +18,11 @@ const getPokemonByName = (pokemonName, userID, callback) => {
             if (error) {
                 throw(error)
             } else {
+                con.release()
                 return callback(results)
             }
         })
     
-        con.release()
     })
 } 
     
@@ -68,6 +63,7 @@ const sortVersion = (userID, version, callback) => {
             if (error) {
                 console.log(error)
             } else {
+                con.release()
                 return callback(results)
             }
         })

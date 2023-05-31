@@ -1,7 +1,6 @@
 const express = require('express');
 const { registerUser, returnResults, sort } = require('./routeFunctions')
 const session = require('express-session')
-const cookieParser = require('cookie-parser')
 const { getUserFromDBByUsername, updatePokemonUsers, 
     getPokemonByName, getPicUrls,
     getProfilePic, updateProfilePic,
@@ -13,6 +12,7 @@ const passport = require("passport")
 const AWS = require('aws-sdk')
 const fs = require('fs')
 require('./passportConfig')
+
 
 /*-------------------------- End Imports -------------------------------------*/
 
@@ -95,8 +95,8 @@ app.put("/profilePic", async (req, res) => {
             return
         }
         const key = results[0].profile_pic.match(/\.com\/(.*)/)[1]
-        const params = {Bucket: process.env.BUCKET, Key: key}
-        s3.deleteObject(params, (err, data) => {
+        const delParams = {Bucket: process.env.BUCKET, Key: key}
+        s3.deleteObject(delParams, (err, data) => {
             if (err) {
                 console.log(err)
             } else {
@@ -105,13 +105,13 @@ app.put("/profilePic", async (req, res) => {
         })
     })
 
-    const params = {
+    const upParams = {
         Bucket: "pokedexpictures",
         Key: `profilePictures/${userID}${Date.now()}.png`,
         Body: buffer
     };
 
-    const { Location } = await s3.upload(params).promise()
+    const { Location } = await s3.upload(upParams).promise()
 
     updateProfilePic(userID, Location)
     res.json({Location: Location})

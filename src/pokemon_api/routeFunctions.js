@@ -49,13 +49,14 @@ const registerUser = async (req, res) => {
 const returnResults = (res, results) => {
     try {
         if (!results) {
-            return res.send({})
+            return res.sendStatus(404)
         } else {
             return res.json(results)
         }
     }
     catch (err) {
-        throw (err)
+        res.sendStatus(500)
+        throw (err);
     }
 }
 
