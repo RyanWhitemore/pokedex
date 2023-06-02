@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react'
 
 const Image = (props) => {
 
-        const path = "https://pokedex-project.com/api" 
+        const path = "pokedex-project.com/api" 
 
-        const [image, setImage] = useState([])
-        const [loading, setLoading] = useState(true)
+        const [image, setImages] = useState([])
+        const [loading, setLoading] = useState(false)
 
         const getImage = async () => {
             const result = await axios.get(path + "/picUrls/" + props.id)
             for (const url of result.data) {
-                setImage(oldArray => [...oldArray, url.image])
+                setImages(oldArray => [...oldArray, url.image])
                 
             }
             setLoading(false)
@@ -23,7 +23,7 @@ const Image = (props) => {
 
         if (loading) {
             return <>
-                <h1></h1>
+                <h1>Loading</h1>
             </>
         } else {
             

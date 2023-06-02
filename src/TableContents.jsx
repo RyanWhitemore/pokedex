@@ -8,19 +8,20 @@ const TableContents = ({ areaSelected, setAreaSelected,
 
     return (
         <>
-            <tr key="0">
+            <tr key="header0">
                 <th>Picture</th>
                 <th>Pokemon #</th>
                 <th>Pokemon Name</th>
                 <th><AreaDropdown
+                key="AreaDropdown"
                 getPokemon={getPokemon} 
                 pokemon={pokemon} 
                 setPokemon={setPokemon}
                 areaSelected={areaSelected}
                 setAreaSelected={setAreaSelected}
                 handleDropdown={handleDropdown}/></th>
-                <th><TypeDropdown handleDropdown={handleDropdown} /></th>
-                <th><CaughtDropdown handleDropdown={handleDropdown}/></th>
+                <th><TypeDropdown key={"typeDropdown"}handleDropdown={handleDropdown} /></th>
+                <th><CaughtDropdown key={"caughtDropdown"} handleDropdown={handleDropdown}/></th>
             </tr>
         </>
     )

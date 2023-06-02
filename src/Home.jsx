@@ -1,14 +1,15 @@
 import axios from 'axios'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, StrictMode } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import TableContents from './TableContents'
 import TableRows from './TableRows'
 import Search from './Search'
 import VersionCheck from './VersionCheck'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Home = () => {
 
-    const path = "https://pokedex-project.com/api"
+    const path = "pokedex-project.com/api"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
@@ -19,7 +20,11 @@ const Home = () => {
     }
     catch (err) {
        user = false
-    }
+    } 
+
+    const [ moreToLoad, setMoreToLoad ] = useState(true)
+
+    const [ numberRows, setNumberRows ] = useState(10)
 
     const [ areaSelected, setAreaSelected ] = useState('all')
 
@@ -37,7 +42,19 @@ const Home = () => {
 
 
     /*----------------------- Begin controller functions ---------------------*/
-    
+
+    const backToTop = () => {
+        window.scrollTo({
+            top:0,
+            behavior: 'smooth'
+        });
+    };
+
+    const next = () => {
+        if (numberRows < pokemon.length) {
+            setNumberRows(numberRows + 10)
+        } else {setMoreToLoad(false)}
+    }
 
     const setVersion = async () => {
         try {
@@ -129,6 +146,7 @@ const Home = () => {
     )
     
     useEffect(() => {
+
         async function sort() {
             try {
                 const userID = user.user_id
@@ -147,7 +165,9 @@ const Home = () => {
                 throw (err)
             }
     }
+
     sort()
+        
     }, [user.user_id, typeSelected, areaSelected, caughtSelected])
 
     // function to log user out
@@ -194,6 +214,16 @@ const Home = () => {
     /*--------------------------- Return final html --------------------------*/
     return (
         <>
+                <InfiniteScroll
+                    dataLength={numberRows}
+                    next={next}
+                    loader={<h4>Loading</h4>}
+                    hasMore={moreToLoad}
+                    endMessage={<button onClick={backToTop}>Back to Top</button>}
+
+
+                >
+            
             <div className="profile">
                 <img alt="" src={imageUrl} height="100px" width="100px"/>
                 <Link id="profile" className="profile" to="/profile">Profile
@@ -213,6 +243,7 @@ const Home = () => {
             />
            <Search submitSearch={submitSearch} setSearch={setSearch}/>
             <button  id="logout" onClick={(e) => logout(e)}>logout</button>
+            
             <table>
                 <tbody>
                     <TableContents 
@@ -222,9 +253,14 @@ const Home = () => {
                     handleDropdown={handleDropdown}
                     setAreaSelected={setAreaSelected}
                     areaSelected={areaSelected}/>
-                    <TableRows pokemon={pokemon} handleChange={handleChange}/>
+                    <TableRows key={"tablerows"} numberRows={numberRows}
+                        setNumberRows={setNumberRows} 
+                        pokemon={pokemon} 
+                        handleChange={handleChange}/>
                 </tbody>
+                
             </table>
+            </InfiniteScroll>
         </>
     )
 }

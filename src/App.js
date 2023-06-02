@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Route, Routes, BrowserRouter, Navigate, Link } from 'react-router-dom'
 const { LoginForm } = require("./login.jsx")
 const { Register } = require("./register.jsx")
@@ -11,6 +11,7 @@ const { Profile } = require('./Profile.jsx')
 const App = () => {
 
     const [user, setUser] = useState({})
+
 
     return (
         <>
