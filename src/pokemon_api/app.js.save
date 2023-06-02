@@ -157,7 +157,7 @@ app.get('/version/:userID', (req, res) => {
 })
 
 // Route for logging in user using passport
-app.post('/login',  passport.authenticate('local', { failureRedirect: '/api'}),
+app.post('/login',  passport.authenticate('local', { failureRedirect: '/'}),
  (req, res) => {
     const userReturnObject = {username: req.username}
     req.session.jwt = jwt.sign(userReturnObject,

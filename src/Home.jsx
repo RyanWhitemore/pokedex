@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Home = () => {
 
-    const path = "pokedex-project.com/api"
+    const path = "https://pokedex-project.com/api"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
@@ -24,7 +24,7 @@ const Home = () => {
 
     const [ moreToLoad, setMoreToLoad ] = useState(true)
 
-    const [ numberRows, setNumberRows ] = useState(10)
+    const [ numberRows, setNumberRows ] = useState(25)
 
     const [ areaSelected, setAreaSelected ] = useState('all')
 

@@ -40,6 +40,7 @@ passport.use(new LocalStrategy( async (username, password, done,) => {
                 console.log('password matched')
                 return done(null, user)
             } else {
+		console.log("password wrong")
                 return done(null, false)
             }
         } catch(error) {
