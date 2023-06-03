@@ -4,7 +4,7 @@ import axios from "axios";
 
 const Register = () => {
     const navigate = useNavigate();
-    const path = "https://pokedex-project.com"
+    const path = "https://pokedex-project.com/api"
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

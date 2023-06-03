@@ -252,7 +252,9 @@ const Home = () => {
                     setPokemon={setPokemon}
                     handleDropdown={handleDropdown}
                     setAreaSelected={setAreaSelected}
-                    areaSelected={areaSelected}/>
+                    areaSelected={areaSelected}
+                    typeSelected={typeSelected}
+                    caughtSelected={caughtSelected}/>
                     <TableRows key={"tablerows"} numberRows={numberRows}
                         setNumberRows={setNumberRows} 
                         pokemon={pokemon} 

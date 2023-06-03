@@ -1,5 +1,5 @@
 
-const TypeDropdown = ({ handleDropdown }, props) => {
+const TypeDropdown = ({ handleDropdown, typeSelected}, props) => {
 
     const typeHtml = []
     
@@ -18,7 +18,8 @@ const TypeDropdown = ({ handleDropdown }, props) => {
     return (
         <>
             <div>
-                <select onChange={(e) => handleDropdown(e)} name="type" id="type">
+                <select onChange={(e) => handleDropdown(e)} name="type" 
+                id="type" value={typeSelected}>
                     <option key="default" value="" defaultValue={""}>Type</option>
                     <option key="all" value="">All</option>
                     {typeHtml}
