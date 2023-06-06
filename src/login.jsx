@@ -8,6 +8,7 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [ error, setError ] = useState("")
 
 
     // Function to retrieve user id from api
@@ -55,6 +56,7 @@ const LoginForm = () => {
             return navigate("/home")
         } else {
             console.log(loggedIn)
+            setError("Username or password incorrect")
         }
        
     } 
@@ -73,6 +75,7 @@ const LoginForm = () => {
                     type='password'></input><br/>
                     <button type="submit">Login</button><br/>
                 </form>
+                {error ? <h4 id={"error"}>{error}</h4> : ''}
                 <Link to="/register">register</Link>
             </div>
         </>

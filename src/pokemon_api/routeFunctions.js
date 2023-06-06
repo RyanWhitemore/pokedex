@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
                 throw(err)
             }
             if (results.length > 0) {
-                return res.status(400).send('username taken')
+                return res.status(200).send(false)
             } else {
                 const salt = await bcrypt.genSalt(saltRounds)
                 const hash = await bcrypt.hash(password, salt)
@@ -49,7 +49,7 @@ const registerUser = async (req, res) => {
 const returnResults = (res, results) => {
     try {
         if (!results) {
-            return res.sendStatus(404)
+            return res.send(false)
         } else {
             return res.json(results)
         }

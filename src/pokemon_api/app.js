@@ -65,7 +65,6 @@ app.get('/sort', sort)
 
 // Route to get user information from database by given username
 app.get('/user/:username', (req, res) => {
-
     getUserFromDBByUsername(req.params.username, async (user) => {
         user = user[0]
         returnResults(res, user)
