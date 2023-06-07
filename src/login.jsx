@@ -65,6 +65,7 @@ const LoginForm = () => {
     return (
         <>
             <div id="login">
+                <Link id={"about"} to="/about">About</Link>
                 <h1>Login</h1>
                 <form onSubmit={loginUser}>
                     <input value={username} placeholder="username" 

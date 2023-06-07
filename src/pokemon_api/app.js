@@ -32,7 +32,7 @@ const secret = process.env.SECRET
 
 
 const corsConfig = {
-    origin: "http://localhost:3000",
+    origin: "https://pokedex-project.com",
     credentials: true,
 }
 
