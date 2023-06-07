@@ -96,8 +96,7 @@ const Register = () => {
         if (password.length > 0) {
             checkPassword()
         }
-        if (username.length > 8 && password.length > 10) {
-            console.log(checkPassword() && checkUsername())
+        if (username.length >= 8 && password.length >= 10) {
             if (checkPassword() && checkUsername()) {
                 setCanSubmit(false)
             }

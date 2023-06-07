@@ -61,16 +61,16 @@ div.version-checks {
 
 #register {
     text-align: center;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    position: relative;
+    position: fixed;
+    top: 10%;
+    left: 43%;
 }
 
-#register-header {
-    position: relative;
+#error {
+    color: red;
+    positon: relative;
     align-items: center;
     text-align: center;
-    display: flex;
     justify-content: center;
+    display: flex;
 }
