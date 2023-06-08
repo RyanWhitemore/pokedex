@@ -5,10 +5,24 @@ table {
     margin-right: auto;
     border: 1px solid;
     border-collapse: collapse;
+    
+    height: 1px;
+    display: block;
+    height: 65vh;
 }
+
+
 
 th, td {
     border: 1px solid;
+}
+
+th {
+    position: sticky;
+    top: 0px;
+    margin: 0 0 0 0;
+    background-color: white;
+    border-bottom: 1px solid black;
 }
 
 #logout {
@@ -38,6 +52,7 @@ div.profile {
     vertical-align: top;
     text-align: center;
     width: 120px;
+    position: sticky;
 }
 
 div.profile-page {
@@ -73,4 +88,18 @@ div.version-checks {
     text-align: center;
     justify-content: center;
     display: flex;
+}
+
+#about {
+    justify-content: right;
+}
+
+#About-div {
+    text-align: center;
+    position: fixed;
+    justify-content: center;
+}
+
+#tablerows {
+    position: relative;
 }

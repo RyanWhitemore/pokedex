@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useState, useCallback, StrictMode } from 'react'
+import { useEffect, useState, useCallback, Fragment } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import TableContents from './TableContents'
 import TableRows from './TableRows'
@@ -44,7 +44,8 @@ const Home = () => {
     /*----------------------- Begin controller functions ---------------------*/
 
     const backToTop = () => {
-        window.scrollTo({
+        const element = document.getElementsByClassName('infiniteScroll')
+        element[0].scroll({
             top:0,
             behavior: 'smooth'
         });
@@ -214,15 +215,6 @@ const Home = () => {
     /*--------------------------- Return final html --------------------------*/
     return (
         <>
-                <InfiniteScroll
-                    dataLength={numberRows}
-                    next={next}
-                    loader={<h4>Loading</h4>}
-                    hasMore={moreToLoad}
-                    endMessage={<button onClick={backToTop}>Back to Top</button>}
-
-
-                >
             
             <div className="profile">
                 <img alt="" src={imageUrl} height="100px" width="100px"/>
@@ -244,25 +236,33 @@ const Home = () => {
            <Search submitSearch={submitSearch} setSearch={setSearch}/>
             <button  id="logout" onClick={(e) => logout(e)}>logout</button>
             
-            <table>
-                <tbody>
-                    <TableContents 
-                    getPokemon={getPokemon}
-                    pokemon={pokemon}
-                    setPokemon={setPokemon}
-                    handleDropdown={handleDropdown}
-                    setAreaSelected={setAreaSelected}
-                    areaSelected={areaSelected}
-                    typeSelected={typeSelected}
-                    caughtSelected={caughtSelected}/>
-                    <TableRows key={"tablerows"} numberRows={numberRows}
-                        setNumberRows={setNumberRows} 
-                        pokemon={pokemon} 
-                        handleChange={handleChange}/>
-                </tbody>
-                
-            </table>
-            </InfiniteScroll>
+                <table id={"table"}>
+                    <InfiniteScroll
+                    className='infiniteScroll'
+                        dataLength={numberRows}
+                        next={next}
+                        loader={<h4>Loading</h4>}
+                        hasMore={moreToLoad}
+                        height={685}
+                        endMessage={<button onClick={backToTop}>Back to Top</button>}
+                    >           
+                        <tbody>
+                            <TableContents 
+                            getPokemon={getPokemon}
+                            pokemon={pokemon}
+                            setPokemon={setPokemon}
+                            handleDropdown={handleDropdown}
+                            setAreaSelected={setAreaSelected}
+                            areaSelected={areaSelected}
+                            typeSelected={typeSelected}
+                            caughtSelected={caughtSelected}/>
+                            <TableRows key={"tablerows"} numberRows={numberRows}
+                                setNumberRows={setNumberRows} 
+                                pokemon={pokemon} 
+                                handleChange={handleChange}/>
+                        </tbody>
+                    </InfiniteScroll>
+                </table>
         </>
     )
 }
