@@ -5,13 +5,18 @@ table {
     margin-right: auto;
     border: 1px solid;
     border-collapse: collapse;
-    
     height: 1px;
     display: block;
     height: 65vh;
 }
 
+td {
+    width: 13.6%;
+}
 
+#region-td {
+    width: 31.6%
+}
 
 th, td {
     border: 1px solid;
@@ -102,4 +107,5 @@ div.version-checks {
 
 #tablerows {
     position: relative;
+    width: 100%;
 }

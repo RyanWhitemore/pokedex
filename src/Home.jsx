@@ -6,10 +6,11 @@ import TableRows from './TableRows'
 import Search from './Search'
 import VersionCheck from './VersionCheck'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { getElementError } from '@testing-library/react'
 
 const Home = () => {
 
-    const path = "https://pokedex-project.com/api"
+    const path = "http://localhost:5000"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
@@ -52,6 +53,7 @@ const Home = () => {
     };
 
     const next = () => {
+        console.log(numberRows)
         if (numberRows < pokemon.length) {
             setNumberRows(numberRows + 10)
         } else {setMoreToLoad(false)}
@@ -65,6 +67,18 @@ const Home = () => {
         } catch (err) {
             throw (err)
         }
+    }
+
+    // function to reset the home page
+
+    const reset = () => {
+        setAreaSelected('all')
+        setTypeSelected('all')
+        setCaughtSelected('all')
+        getPokemon()
+        setNumberRows(25)
+        setMoreToLoad(true)
+        backToTop()
     }
 
 
@@ -187,6 +201,8 @@ const Home = () => {
             axios.defaults.baseURL = ""
             const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
             setPokemon(results.data)
+            setNumberRows(1)
+            setMoreToLoad(false)
             
         } catch (err) {
             throw (err)
@@ -221,13 +237,7 @@ const Home = () => {
                 <Link id="profile" className="profile" to="/profile">Profile
                 </Link>
             </div>
-                <h1 onClick={(e) => {
-                    setAreaSelected('all')
-                    setTypeSelected('all')
-                    setCaughtSelected('all')
-                    getPokemon()
-                        }
-                    } id="header">Pokedex</h1>
+                <h1 onClick={reset} id="header">Pokedex</h1>
             <VersionCheck 
                 getPokemon={getPokemon}
                 setPokemon={setPokemon}

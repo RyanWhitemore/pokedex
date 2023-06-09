@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom"
 
 const Profile = () => {
     const navigate = useNavigate()
-    const path = "https://pokedex-project.com/api"
+    const path = "http://localhost:5000"
 
     const user = JSON.parse(localStorage.getItem("user"))
     const [ file, setFile ] = useState(null);
