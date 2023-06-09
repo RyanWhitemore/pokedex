@@ -10,7 +10,7 @@ import { getElementError } from '@testing-library/react'
 
 const Home = () => {
 
-    const path = "http://localhost:5000"
+    const path = "https://pokedex-project.com/api"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
