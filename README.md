@@ -26,4 +26,4 @@ games that you have caught and have yet to catch.
 - Login functionality to have each users caught info persist in the database under their userID
   
   
-### You can see the code implemented here: pokedex-project.com
+### You can see the code implemented here: [Pokedex](pokedex-project.com)
