@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const LoginForm = () => {
     // Initialize variables
-    const path = "http://localhost:5000"
+    const path = "https://pokedex-project.com"
     const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
