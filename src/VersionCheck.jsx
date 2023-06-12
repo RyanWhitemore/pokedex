@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
     
-    const path = "https://pokedex-project.com/api"
+    const path = "http://localhost:5000"
     const [checkedViolet, setCheckedViolet] = useState(false)
     const [checkedScarlet, setCheckedScarlet] = useState(false)
     const [checkedAll, setCheckedAll] = useState(false)
@@ -61,8 +61,7 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
 
     return (
         <div className='version-checks'>
-            <h3>Version</h3>
-            <input type="checkbox"
+            <h3>Version: <input type="checkbox"
             checked={checkedScarlet} 
             value="scarlet"
             onChange={(e) => {e.preventDefault(); 
@@ -75,7 +74,8 @@ const VersionCheck = ({setPokemon, getPokemon, pokemon}) => {
             <input checked={checkedAll} type="checkbox"
             value="all"
             onChange={(e) => {e.preventDefault(); 
-                handleCheck(e)}}/>All
+                handleCheck(e)}}/>All</h3>
+            
         </div>
     ) 
 }

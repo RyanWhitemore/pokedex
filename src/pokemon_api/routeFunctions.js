@@ -76,6 +76,7 @@ const sort = (req, res, next) => {
             FROM pokemon_users
             INNER JOIN pokemon On pokemon_users.pokemon_id = pokemon.pokemon_id 
             where user_id = ${con.escape(userID)}
+            AND version in ('all', ${con.escape(version)})
         `)
         
 

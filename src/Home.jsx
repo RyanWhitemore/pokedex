@@ -6,11 +6,10 @@ import TableRows from './TableRows'
 import Search from './Search'
 import VersionCheck from './VersionCheck'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { getElementError } from '@testing-library/react'
 
 const Home = () => {
 
-    const path = "https://pokedex-project.com/api"
+    const path = "http://localhost:5000"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
@@ -45,7 +44,7 @@ const Home = () => {
     /*----------------------- Begin controller functions ---------------------*/
 
     const backToTop = () => {
-        const element = document.getElementsByClassName('infiniteScroll')
+        const element = document.getElementsByClassName('infinite-scroll-component')
         element[0].scroll({
             top:0,
             behavior: 'smooth'
@@ -79,6 +78,7 @@ const Home = () => {
         setNumberRows(25)
         setMoreToLoad(true)
         backToTop()
+        setSearch('')
     }
 
 
@@ -105,7 +105,6 @@ const Home = () => {
 
     // Function to retrieve all pokemon data from database via api
     const getPokemon = useCallback(async () => {
-        
         if (!user) {
             return navigate('/')
         }
@@ -231,49 +230,57 @@ const Home = () => {
     /*--------------------------- Return final html --------------------------*/
     return (
         <>
-            
-            <div className="profile">
-                <img alt="" src={imageUrl} height="100px" width="100px"/>
-                <Link id="profile" className="profile" to="/profile">Profile
-                </Link>
-            </div>
-                <h1 onClick={reset} id="header">Pokedex</h1>
-            <VersionCheck 
-                getPokemon={getPokemon}
-                setPokemon={setPokemon}
-                pokemon={pokemon}
-            />
-           <Search submitSearch={submitSearch} setSearch={setSearch}/>
-            <button  id="logout" onClick={(e) => logout(e)}>logout</button>
-            
-                <table id={"table"}>
+            <div id="background" className='background'>
+                <div className="profile">
+                    <img alt="" id={"profile-img"} src={imageUrl} height="100px" width="100px"/>
+                    <Link id="profile" className="profile-link" to="/profile">{user.username}
+                    </Link> <br/>
+                    <button  id="logout" onClick={(e) => logout(e)}>logout</button>
+                </div>
+                <div id={"header"}>
+                    <h1 id={"header-text"} onClick={reset}>Pokédex</h1>
+                    <Search submitSearch={submitSearch} 
+                        setSearch={setSearch}
+                        search={search}/>
+                </div>
+                <div id="space"></div>
+                <VersionCheck 
+                    getPokemon={getPokemon}
+                    setPokemon={setPokemon}
+                    pokemon={pokemon}
+                />
+                <div id="space"></div>
+
                     <InfiniteScroll
-                    className='infiniteScroll'
-                        dataLength={numberRows}
-                        next={next}
-                        loader={<h4>Loading</h4>}
-                        hasMore={moreToLoad}
-                        height={685}
-                        endMessage={<button onClick={backToTop}>Back to Top</button>}
-                    >           
-                        <tbody>
-                            <TableContents 
-                            getPokemon={getPokemon}
-                            pokemon={pokemon}
-                            setPokemon={setPokemon}
-                            handleDropdown={handleDropdown}
-                            setAreaSelected={setAreaSelected}
-                            areaSelected={areaSelected}
-                            typeSelected={typeSelected}
-                            caughtSelected={caughtSelected}/>
-                            <TableRows key={"tablerows"} numberRows={numberRows}
-                                setNumberRows={setNumberRows} 
-                                pokemon={pokemon} 
-                                handleChange={handleChange}/>
-                        </tbody>
+                                dataLength={numberRows}
+                                next={next}
+                                loader={<h4>Loading</h4>}
+                                hasMore={moreToLoad}
+                                height={"65vh"}
+                                endMessage={<button id={"back-to-top"} onClick={backToTop}>Back to Top</button>}
+                        > 
+                        <table id={"table"}>
+
+                                <tbody>
+                                    <TableContents 
+                                    getPokemon={getPokemon}
+                                    pokemon={pokemon}
+                                    setPokemon={setPokemon}
+                                    handleDropdown={handleDropdown}
+                                    setAreaSelected={setAreaSelected}
+                                    areaSelected={areaSelected}
+                                    typeSelected={typeSelected}
+                                    caughtSelected={caughtSelected}/>
+                                    <TableRows key={"tablerows"} numberRows={numberRows}
+                                        setNumberRows={setNumberRows} 
+                                        pokemon={pokemon} 
+                                        handleChange={handleChange}/>
+                                </tbody>
+
+                        </table>
                     </InfiniteScroll>
-                </table>
-        </>
+                </div>
+        </> 
     )
 }
 

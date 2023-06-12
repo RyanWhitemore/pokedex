@@ -12,7 +12,8 @@ const AreaDropdown = (props) => {
     return (
         <div>
             <select onChange={e => {e.preventDefault(); props.handleDropdown(e)}} 
-            name="area" id="area" value={props.areaSelected}>
+            name="area" id="area-dropdown" className="dropdown" 
+            value={props.areaSelected}>
                 <option key="default" value="" defaultValue={""}>Area</option>
                 <option key="all" value="">All</option>
                 <option key="violet" value="violet">Violet Exclusive</option>

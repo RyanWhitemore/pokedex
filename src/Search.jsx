@@ -1,9 +1,10 @@
-const Search = ({ submitSearch, setSearch }) => {
+const Search = ({ submitSearch, search, setSearch }) => {
     return (
         <form onSubmit={(e) => {e.preventDefault(); submitSearch(e)}}>
         <input className='search-bar' 
         type="text" 
-        onChange={(e) => {e.preventDefault(); setSearch(e.target.value)}} 
+        onChange={(e) => {e.preventDefault(); setSearch(e.target.value)}}
+        value={search} 
         placeholder='search'/>
         <input id="search-image" 
         type="image" 

@@ -1,47 +1,95 @@
 table {
-    width: 66%;
+    width: 100%;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid;
-    border-collapse: collapse;
-    height: 1px;
-    display: block;
-    height: 65vh;
+    margin-left: 0 auto;
+    margin-right: 0 auto;
+    display: table;
+    border-spacing: 0;
+}
+
+table tr th,
+table tr td {
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 5px;
+}
+table tr th:first-child,
+table tr td:first-child {
+  border-left: 1px solid #bbb;
+}
+table tr th {
+  border-top: 1px solid #bbb;
+  text-align: center;
+}
+
+table tr:first-child th:first-child {
+  border-top-left-radius: 6px;
+}
+
+table tr:first-child th:last-child {
+  border-top-right-radius: 6px;
+}
+
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 6px;
+}
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 6px;
 }
 
 td {
-    width: 13.6%;
+    width: 12.6vw
 }
 
 #region-td {
-    width: 31.6%
+    width: 32.6vw
 }
 
 th, td {
-    border: 1px solid;
+    color: rgb(0, 0, 0);
+    border: 1px solid white;
+    background-color: rgba(186, 169, 192, 0.95);
+    text-align: center;
+}
+
+#tablerow {
+    width: 100%;
 }
 
 th {
     position: sticky;
     top: 0px;
     margin: 0 0 0 0;
-    background-color: white;
-    border-bottom: 1px solid black;
+    background-color: rgba(186, 169, 192, 0.95);
 }
 
 #logout {
-   float: right;
+    background-color: rgba(186, 169, 192, 0.95);
+    color: black;
+    float: right;
+    border-radius: 6px;
 }
 
 #header {
+    padding-top: 1vh;
+    padding-bottom: 5vh;
     display: block;
-    border-bottom: 2px solid red;
-    font-size: 50px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 2vw;
+    text-size-adjust: auto;
     text-align: center;
     cursor: pointer;
+    color: black;
+    background-color: rgba(186, 169, 192, 0.95);
+    border-radius: 6px;
+    border: 1px solid white;
+    margin-left: 40%;
+    margin-right: 40%;
+    min-width: 100px;
+}
+
+#header-text {
+    height: 10px;
 }
 
 #search-image {
@@ -52,12 +100,28 @@ th {
     right: 20px;
 }
 
-div.profile {
-    margin-left: auto;
-    vertical-align: top;
+
+
+#profile-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.profile-link {
+    color: black;
+    font-size: x-large;
     text-align: center;
-    width: 120px;
-    position: sticky;
+}
+
+.profile {
+    margin-left: auto;
+    background-color: rgba(186, 169, 192, 0.95);
+    margin-right: 15px;
+    text-align: center;
+    width: 150px;
+    padding-top: 20px;
+    border-radius: 25px;
 }
 
 div.profile-page {
@@ -67,9 +131,20 @@ div.profile-page {
 }
 
 div.version-checks {
+    background-color: rgba(186, 169, 192, 0.95);
+    width: 15vw;
     margin: auto;
     vertical-align: top;
     text-align: center;
+    color: black;
+    border-radius: 6px;
+    border: 1px solid white;
+    border-spacing: 5px;
+    min-width: 300px;
+}
+
+#space {
+    height: 10px;
 }
 
 #login {
@@ -108,4 +183,47 @@ div.version-checks {
 #tablerows {
     position: relative;
     width: 100%;
+}
+
+
+.dropdown {
+    background-color: rgba(186, 169, 192, 0.95);
+    color: black;
+    text-align: center;
+    
+}
+
+.background {
+    padding-top: 15px;
+    position: relative;
+    background-image: url("./wp11270201.webp");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.infinite-scroll-component {
+    width: 66.6%;
+    margin: auto;
+    scrollbar-color: dark
+}
+
+.infinite-scroll-component_outerdiv {
+    scrollbar-color: dark
+}
+
+
+.search-bar {
+    color: black;
+    background-color: rgba(186, 169, 192, 0.95);
+    width: 8vw;
+    min-width: 60px;
+}
+
+.search-bar::placeholder {
+    color: black;
+}
+
+#back-to-top {
+    background-color: rgba(186, 169, 192, 0.95);
+    border-radius: 6px;
 }
