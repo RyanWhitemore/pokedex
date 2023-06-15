@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Home = () => {
 
-    const path = "http://localhost:5000"
+    const path = "https://pokedex-project.com/api"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
