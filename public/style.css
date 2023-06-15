@@ -1,229 +1,320 @@
-table {
-    width: 100%;
-    text-align: center;
-    margin-left: 0 auto;
-    margin-right: 0 auto;
-    display: table;
-    border-spacing: 0;
+* {
+    box-sizing: border-box;
 }
 
-table tr th,
-table tr td {
-  border-right: 1px solid white;
-  border-bottom: 1px solid white;
-  padding: 5px;
-}
-table tr th:first-child,
-table tr td:first-child {
-  border-left: 1px solid #bbb;
-}
-table tr th {
-  border-top: 1px solid #bbb;
-  text-align: center;
+@media (max-width:320px) {
+   
 }
 
-table tr:first-child th:first-child {
-  border-top-left-radius: 6px;
-}
+@media (max-width:481px) {
 
-table tr:first-child th:last-child {
-  border-top-right-radius: 6px;
-}
-
-table tr:last-child td:first-child {
-  border-bottom-left-radius: 6px;
-}
-
-table tr:last-child td:last-child {
-  border-bottom-right-radius: 6px;
-}
-
-td {
-    width: 12.6vw
-}
-
-#region-td {
-    width: 32.6vw
-}
-
-th, td {
-    color: rgb(0, 0, 0);
-    border: 1px solid white;
-    background-color: rgba(186, 169, 192, 0.95);
-    text-align: center;
-}
-
-#tablerow {
-    width: 100%;
-}
-
-th {
-    position: sticky;
-    top: 0px;
-    margin: 0 0 0 0;
-    background-color: rgba(186, 169, 192, 0.95);
-}
-
-#logout {
-    background-color: rgba(186, 169, 192, 0.95);
-    color: black;
-    float: right;
-    border-radius: 6px;
-}
-
-#header {
-    padding-top: 1vh;
-    padding-bottom: 5vh;
-    display: block;
-    font-size: 2vw;
-    text-size-adjust: auto;
-    text-align: center;
-    cursor: pointer;
-    color: black;
-    background-color: rgba(186, 169, 192, 0.95);
-    border-radius: 6px;
-    border: 1px solid white;
-    margin-left: 40%;
-    margin-right: 40%;
-    min-width: 100px;
-}
-
-#header-text {
-    height: 10px;
-}
-
-#search-image {
-    width: 20px;
-    height: 20px;
-    position: relative;
-    top: 6px;
-    right: 20px;
-}
-
-
-
-#profile-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-}
-
-.profile-link {
-    color: black;
-    font-size: x-large;
-    text-align: center;
-}
-
-.profile {
-    margin-left: auto;
-    background-color: rgba(186, 169, 192, 0.95);
-    margin-right: 15px;
-    text-align: center;
-    width: 150px;
-    padding-top: 20px;
-    border-radius: 25px;
-}
-
-div.profile-page {
-    margin: auto;
-    vertical-align: top;
-    text-align: center;
-}
-
-div.version-checks {
-    background-color: rgba(186, 169, 192, 0.95);
-    width: 15vw;
-    margin: auto;
-    vertical-align: top;
-    text-align: center;
-    color: black;
-    border-radius: 6px;
-    border: 1px solid white;
-    border-spacing: 5px;
-    min-width: 300px;
-}
-
-#space {
-    height: 10px;
-}
-
-#login {
-    text-align: center;
-    top: 10%;
-    left: 43%;
-    position: fixed;
-}
-
-#register {
-    text-align: center;
-    position: fixed;
-    top: 10%;
-    left: 43%;
-}
-
-#error {
-    color: red;
-    position: relative;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    display: flex;
-}
-
-#about {
-    justify-content: right;
-}
-
-#About-div {
-    text-align: center;
-    position: fixed;
-    justify-content: center;
-}
-
-#tablerows {
-    position: relative;
-    width: 100%;
-}
-
-
-.dropdown {
-    background-color: rgba(186, 169, 192, 0.95);
-    color: black;
-    text-align: center;
+    .banner {
+        background-color: rgb(30, 77, 30);
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+    }
     
+    .background {
+        background-color: rgb(82, 81, 81);
+    }
+
+    .profile {
+        margin-left: auto;
+        margin-right: 15px;
+        text-align: center;
+        width: 150px;
+        padding-top: 20px;
+    }
+
+    #header {
+        margin-left: auto;
+        text-align: center;
+    }
+    
+    .search-bar {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .search-div {
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+
+    table {
+        font-size: xx-small;
+        border: solid rgb(82, 81, 81);
+        border-collapse: collapse;
+        background-color: rgb(121, 118, 118);
+    }
+
+    .version-checks {
+        text-align: center;
+    }
+
+    .pokemon-img {
+        width: 35px;
+        height: 35px;
+    }
+
+    th {
+        width: 12.6vw;
+        border: solid rgb(82, 81, 81);
+        background-color: rgb(121, 118, 118);
+    }
+
+    td {
+        width: 12.6vw;
+        border: solid rgb(82, 81, 81);
+    }
+
+    #area-dropdown {
+        width: 22.6vw;
+    }
+
+    .dropdown {
+        background-color: rgb(121, 118, 118);
+    }
+
+    #logout {
+        background-color: rgb(121, 118, 118);
+        border-radius: 6px;
+    }
+
+    .profile-link {
+        color: black;
+    }
+
 }
 
-.background {
-    padding-top: 15px;
-    position: relative;
-    background-image: url("./wp11270201.webp");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-
-.infinite-scroll-component {
-    width: 66.6%;
-    margin: auto;
-    scrollbar-color: dark
-}
-
-.infinite-scroll-component_outerdiv {
-    scrollbar-color: dark
-}
-
-
-.search-bar {
-    color: black;
-    background-color: rgba(186, 169, 192, 0.95);
-    width: 8vw;
-    min-width: 60px;
-}
-
-.search-bar::placeholder {
-    color: black;
-}
-
-#back-to-top {
-    background-color: rgba(186, 169, 192, 0.95);
-    border-radius: 6px;
+@media (min-width:641px) {
+    table {
+        width: 100%;
+        text-align: center;
+        margin-left: 0 auto;
+        margin-right: 0 auto;
+        display: table;
+        border-spacing: 0;
+    }
+    
+    table tr th,
+    table tr td {
+      border-right: 1px solid white;
+      border-bottom: 1px solid white;
+      padding: 5px;
+    }
+    table tr th:first-child,
+    table tr td:first-child {
+      border-left: 1px solid #bbb;
+    }
+    table tr th {
+      border-top: 1px solid #bbb;
+      text-align: center;
+    }
+    
+    table tr:first-child th:first-child {
+      border-top-left-radius: 6px;
+    }
+    
+    table tr:first-child th:last-child {
+      border-top-right-radius: 6px;
+    }
+    
+    table tr:last-child td:first-child {
+      border-bottom-left-radius: 6px;
+    }
+    
+    table tr:last-child td:last-child {
+      border-bottom-right-radius: 6px;
+    }
+    
+    td {
+        width: 12.6vw
+    }
+    
+    #region-td {
+        width: 32.6vw
+    }
+    
+    th, td {
+        color: rgb(0, 0, 0);
+        border: 1px solid white;
+        background-color: rgba(186, 169, 192, 0.95);
+        text-align: center;
+    }
+    
+    #tablerow {
+        width: 100%;
+    }
+    
+    th {
+        position: sticky;
+        top: 0px;
+        margin: 0 0 0 0;
+        background-color: rgba(186, 169, 192, 0.95);
+    }
+    
+    #logout {
+        background-color: rgba(186, 169, 192, 0.95);
+        color: black;
+        float: right;
+        border-radius: 6px;
+    }
+    
+    #header {
+        padding-top: 1vh;
+        padding-bottom: 5vh;
+        display: block;
+        font-size: 2vw;
+        text-size-adjust: auto;
+        text-align: center;
+        cursor: pointer;
+        color: black;
+        background-color: rgba(186, 169, 192, 0.95);
+        border-radius: 6px;
+        border: 1px solid white;
+        margin-left: 40%;
+        margin-right: 40%;
+        min-width: 100px;
+    }
+    
+    #header-text {
+        height: 10px;
+    }
+    
+    #search-image {
+        width: 20px;
+        height: 20px;
+        position: relative;
+        top: 6px;
+        right: 20px;
+    }
+    
+    
+    
+    #profile-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+    
+    .profile-link {
+        color: black;
+        font-size: x-large;
+        text-align: center;
+    }
+    
+    .profile {
+        margin-left: auto;
+        background-color: rgba(186, 169, 192, 0.95);
+        margin-right: 15px;
+        text-align: center;
+        width: 150px;
+        padding-top: 20px;
+        border-radius: 25px;
+    }
+    
+    div.profile-page {
+        margin: auto;
+        vertical-align: top;
+        text-align: center;
+    }
+    
+    div.version-checks {
+        background-color: rgba(186, 169, 192, 0.95);
+        width: 15vw;
+        margin: auto;
+        vertical-align: top;
+        text-align: center;
+        color: black;
+        border-radius: 6px;
+        border: 1px solid white;
+        border-spacing: 5px;
+        min-width: 300px;
+    }
+    
+    #space {
+        height: 10px;
+    }
+    
+    #login {
+        text-align: center;
+        top: 10%;
+        left: 43%;
+        position: fixed;
+    }
+    
+    #register {
+        text-align: center;
+        position: fixed;
+        top: 10%;
+        left: 43%;
+    }
+    
+    #error {
+        color: red;
+        position: relative;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        display: flex;
+    }
+    
+    #about {
+        justify-content: right;
+    }
+    
+    #About-div {
+        text-align: center;
+        position: fixed;
+        justify-content: center;
+    }
+    
+    #tablerows {
+        position: relative;
+        width: 100%;
+    }
+    
+    
+    .dropdown {
+        background-color: rgba(186, 169, 192, 0.95);
+        color: black;
+        text-align: center;
+        
+    }
+    
+    .background {
+        padding-top: 15px;
+        position: relative;
+        background-image: url("./wp11270201.webp");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+    
+    .infinite-scroll-component {
+        width: 66.6%;
+        margin: auto;
+        scrollbar-color: dark
+    }
+    
+    .infinite-scroll-component_outerdiv {
+        scrollbar-color: dark
+    }
+    
+    
+    .search-bar {
+        color: black;
+        background-color: rgba(186, 169, 192, 0.95);
+        width: 8vw;
+        min-width: 60px;
+    }
+    
+    .search-bar::placeholder {
+        color: black;
+    }
+    
+    #back-to-top {
+        background-color: rgba(186, 169, 192, 0.95);
+        border-radius: 6px;
+    }
 }

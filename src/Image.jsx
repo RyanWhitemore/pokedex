@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 const Image = (props) => {
 
-        const path = "https://pokedex-project.com" 
+        const path = "http://localhost:5000" 
 
         const [image, setImages] = useState([])
         const [loading, setLoading] = useState(false)
@@ -28,7 +28,8 @@ const Image = (props) => {
         } else {
             
             const renderImages = image.map(url => {
-                return <img key={url} 
+                return <img key={url}
+                        className="pokemon-img" 
                         alt={props.name}
                         src={url}
                         height="75"

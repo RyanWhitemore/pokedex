@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 const Home = () => {
 
-    const path = "https://pokedex-project.com"
+    const path = "http://localhost:5000"
 
     /*------------------- Begin initializing variables -------------------*/
     const navigate = useNavigate()
@@ -231,12 +231,14 @@ const Home = () => {
     return (
         <>
             <div id="background" className='background'>
+            <div className='banner'>
                 <div className="profile">
                     <img alt="" id={"profile-img"} src={imageUrl} height="100px" width="100px"/>
                     <Link id="profile" className="profile-link" to="/profile">{user.username}
                     </Link> <br/>
                     <button  id="logout" onClick={(e) => logout(e)}>logout</button>
                 </div>
+            </div>
                 <div id={"header"}>
                     <h1 id={"header-text"} onClick={reset}>Pokédex</h1>
                     <Search submitSearch={submitSearch} 
