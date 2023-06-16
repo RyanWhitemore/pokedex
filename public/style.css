@@ -2,11 +2,7 @@
     box-sizing: border-box;
 }
 
-@media (max-width:320px) {
-   
-}
-
-@media (max-width:481px) {
+@media only screen and (max-width:681px) {
 
     .banner {
         background-color: rgb(30, 77, 30);
@@ -87,7 +83,7 @@
 
 }
 
-@media (min-width:641px) {
+@media only screen and (min-width:682px) {
     table {
         width: 100%;
         text-align: center;
