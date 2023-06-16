@@ -68,15 +68,20 @@ const Profile = () => {
     return (
         <>
             <div className="profile-page">
-                <img alt="" src={imageUrl} height="100px" width="100px"/>
-                <p>Profile</p>
-                <input type="file" name="file" onChange={fileUpload}/>
-                <div>
-                    <button onClick={handleSubmission}>Submit</button>
+                <div className="banner">
+                    <img id="img" alt="" src={imageUrl} height="100px" width="100px"/>
                 </div>
-            </div>
-            <div>
-                <button onClick={(e) => {e.preventDefault(); navigate('/home')}}>Back</button>
+                <p id="paragraph">Profile</p>
+                <input id="file-input" type="file" name="file" onChange={fileUpload}/>
+                <div>
+                    <button id="file-submit" onClick={handleSubmission}>Submit</button>
+                </div>
+                <div id="button-div">
+                    <button 
+                        id ="back-button" 
+                        onClick={(e) => {e.preventDefault(); navigate('/home')}}>Back
+                    </button>
+                </div>
             </div>
         </>
     )

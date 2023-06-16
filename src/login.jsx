@@ -64,20 +64,24 @@ const LoginForm = () => {
     // return html for login page
     return (
         <>
-            <div id="login">
-                <Link id={"about"} to="/about">About</Link>
-                <h1>Login</h1>
-                <form onSubmit={loginUser}>
-                    <input value={username} placeholder="username" 
-                    onChange={(e) => setUsername(e.target.value)} 
-                    type='text'></input><br/>
-                    <input value={password} placeholder="password" 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    type='password'></input><br/>
-                    <button type="submit">Login</button><br/>
-                </form>
-                {error ? <h4 id={"error"}>{error}</h4> : ''}
-                <Link to="/register">register</Link>
+            <div id={"background"}>
+                <div id="login">
+                    <Link id={"about"} to="/about">About</Link>
+                    <h1 id={"login-header"}>Login</h1>
+                    <form onSubmit={loginUser}>
+                        <input value={username} id={'username'}
+                        placeholder="username" 
+                        onChange={(e) => setUsername(e.target.value)} 
+                        type='text'></input><br/>
+                        <input value={password} id={"password"}
+                        placeholder="password" 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        type='password'></input><br/>
+                        <button type="submit" id={"login-submit"}>Login</button><br/>
+                    </form>
+                    {error ? <h4 id={"error"}>{error}</h4> : ''}
+                    <Link id={"register-link"} to="/register">register</Link>
+                </div>
             </div>
         </>
     )

@@ -117,19 +117,21 @@ const Register = () => {
     return (
         <>
             <div id="register">
-                <h1>Register</h1>
+                <h1 id={"register-header"}>Register</h1>
                 {usernameTaken ? <h5 id={"error"}>Username taken</h5> : ''}            
                 <form onSubmit={registerUser}>
                     <input 
-                        value={username} 
+                        value={username} id={"register-username"}
+                        placeholder="username"
                         onChange={handleUsernameChange} type='text'></input><br/>
                     <input 
-                        value={password} 
+                        value={password} id={"register-password"}
+                        placeholder="password"
                         onChange={handlePasswordChange} type='text'></input><br/>
-                    <button type="submit" disabled={canSubmit}>Register</button><br/>
+                    <button id={"register-submit"} type="submit" disabled={canSubmit}>Register</button><br/>
                 </form>
                 {error ? <h5 id={"error"}>{error}</h5> : ''}
-                <Link to="/">Login</Link>
+                <Link id={"register-link"} to="/">Login</Link>
             </div>
         </>
     )

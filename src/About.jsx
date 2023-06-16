@@ -9,7 +9,7 @@ const AboutPage = () => {
             <div id={"About-div"}>
                 <h1 id={"About-header"}>About</h1>
                 <h2>Welcome to my first website</h2>
-                <p1>This website was created as a project for me to learn react
+                <p1 id="paragraph">This website was created as a project for me to learn react
                     and express. the idea behind the project was to make a webapp
                     to help track the pokemon you have caught in the pokemon scarlet
                     and violet games. the functionalities that I have implemented so 
