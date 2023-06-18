@@ -1,4 +1,6 @@
 const Search = ({ submitSearch, search, setSearch }) => {
+
+    
     return (
         <div className="search-div">
             <form onSubmit={(e) => {e.preventDefault(); submitSearch(e)}}>

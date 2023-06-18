@@ -7,7 +7,7 @@ const TableRows = ({handleChange, pokemon, numberRows}) => {
     return <React.Fragment key={"fragment" + pokemon.length + 1}>
         {pokemon.slice(0, numberRows).map((pokemon, index) => {
             return (<React.Fragment key={"fragment" + index}>
-                <tr value={pokemon.pokemon_id} id={"tableRow"} key={parseInt(pokemon.pokemon_id + 1)}>
+                <tr value={pokemon.pokemon_id} id={pokemon.pokemon_name} key={parseInt(pokemon.pokemon_id + 1)}>
                     <td key={pokemon.pokemon_name + toString(index)}><Image key={pokemon.pokemon_name + index} name={pokemon.pokemon_name} id={pokemon.pokemon_id} /></td>
                     <td key={pokemon.pokemon_id + 'a'}>{pokemon.pokemon_id}</td>
                     <td key={pokemon.pokemon_id + 'b'}>{pokemon.pokemon_name}</td>

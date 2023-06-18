@@ -38,10 +38,42 @@ const Home = () => {
 
     const [ imageUrl, setImageUrl ] = useState(null)
 
+    const [ documentID, setDocumentID ] = useState(null)
+
+    const [ error, setError ] = useState(null)
+
     /*------------------------ End initializing variables ------------------*/
 
 
     /*----------------------- Begin controller functions ---------------------*/
+
+    const getSearchedPokemon = async() => {
+        try {
+            setError(null)
+            
+            if (search) {
+                const userID = JSON.parse(localStorage.getItem("user")).user_id
+                axios.defaults.baseURL = ""
+                const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
+                
+                setNumberRows(results.data[0].pokemon_id + 20)
+                if (numberRows <= 400) {
+                    setMoreToLoad(true)
+                }
+
+                return setDocumentID(document.querySelector(`[id=${search} i]`))
+                
+            }
+            
+            
+            
+        } catch (err) {
+            return
+        }
+
+    }
+
+     
 
     const backToTop = () => {
         const element = document.getElementsByClassName('infinite-scroll-component')
@@ -52,7 +84,6 @@ const Home = () => {
     };
 
     const next = () => {
-        console.log(numberRows)
         if (numberRows < pokemon.length) {
             setNumberRows(numberRows + 10)
         } else {setMoreToLoad(false)}
@@ -135,12 +166,11 @@ const Home = () => {
         // get profile pic from backend or get default pic
         const getProfilePic = async () => {
             try {
-                console.log("called")
                 const profilePic = await axios.get(
                     path + `/profilePic/` 
                     + user.user_id)
                 if (!profilePic.data[0].profile_pic) {
-                    return setImageUrl("https://pokedexpictures.s3.us-east-2.amazonaws.com/defaults/profileDefault.png")
+                    return setImageUrl("https://pokedexpictures.s3.us-east-2.amazonaws.com/defaults/profile_default.png")
                 } else {
                     setImageUrl(profilePic.data[0].profile_pic)
                 }
@@ -173,16 +203,30 @@ const Home = () => {
                         version: localStorage.getItem("version")
                     }
                 }) 
-            
+                if (results.data.length < 15) {
+                    setMoreToLoad(false)
+                }
                 setPokemon(results.data)
             } catch (err) {
                 throw (err)
             }
     }
 
+
     sort()
+
         
     }, [user.user_id, typeSelected, areaSelected, caughtSelected])
+
+    useEffect(() => {
+        setNumberRows(400)
+        try {
+            documentID.scrollIntoView({block: 'start'})
+        } catch (err) {
+            return
+        }
+        
+    }, [search, documentID])
 
     // function to log user out
     const logout = (e) => {
@@ -194,18 +238,48 @@ const Home = () => {
 
     // Function to handle search submit form
     const submitSearch = async (e) => {
-        try {
-            e.preventDefault()
-            const userID = JSON.parse(localStorage.getItem("user")).user_id
-            axios.defaults.baseURL = ""
-            const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
-            setPokemon(results.data)
-            setNumberRows(1)
-            setMoreToLoad(false)
+        const userID = JSON.parse(localStorage.getItem("user")).user_id
+        axios.defaults.baseURL = ""
+        const results = await axios.get(path + "/pokemon/" + search + '/' + userID)
+
+        
+        if (results.data[0]) {
+            setError('')
+            if (numberRows < results.data[0].pokemon_id) {
+                setNumberRows(results.data[0].pokemon_id)
+            } else {
+                setDocumentID(document.getElementById(results.data[0].pokemon_name))
+            }
             
-        } catch (err) {
-            throw (err)
+
+            return results
+            
+            //setError('No results found')
+        } else {
+            setError("No results found")
         }
+
+        //try {
+        //    setNumberRows(results.data[0].pokemon_id + 10)
+        //    setDocumentID(document.querySelector(`[id=${search} i]`))
+        //} catch (error) {
+        //    throw error
+        //}
+            
+    }
+
+    const setDocument = async (results) => {
+        await setDocumentID(document.getElementById(results.data[0].pokemon_name))
+    }
+
+    const getSearched = (e) => {
+        submitSearch(e)
+        .then((results) => {
+            setDocument(results)
+        })
+        .then(() => {
+            documentID.scrollIntoView()
+        })
     }
 
     // Function to change the caught status of pokemon when box checked
@@ -241,9 +315,11 @@ const Home = () => {
             </div>
                 <div id={"header"}>
                     <h1 id={"header-text"} onClick={reset}>Pokédex</h1>
-                    <Search submitSearch={submitSearch} 
+                    <Search submitSearch={getSearched} 
                         setSearch={setSearch}
-                        search={search}/>
+                        search={search}
+                        getSearchedPokemon={getSearchedPokemon}/>
+                    {error ? <h5>{error}</h5> : ''}
                 </div>
                 <div id="space"></div>
                 <VersionCheck 
